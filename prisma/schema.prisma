@@ -18,16 +18,24 @@ model User {
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @default(now()) @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
-  Contact   Contact[]
+  contacts  Contact[]
 }
 
 model Contact {
   id               Int      @id @default(autoincrement())
-  fullName         String
-  email            String @unique()
-  phone            String @unique()
+  name             String
+  email            String   @unique()
+  phones           Phone[]
   registrationDate DateTime @default(now())
 
-  user   User @relation(fields: [userId], references: [id])
+  user   User @relation(fields: [userId], references: [id], onDelete: NoAction)
   userId Int
+}
+
+model Phone {
+  id    Int    @id @default(autoincrement())
+  phone String
+
+  contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  contactId Int
 }
