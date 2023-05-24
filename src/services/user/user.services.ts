@@ -78,7 +78,7 @@ const updatedUser = await prisma.user.update({
   where:{
     id: id
   },
-  data:{...user,...payload}
+  data:{...user, ...payload}
 })
 
   return resCreateUserSchema.parse(updatedUser);

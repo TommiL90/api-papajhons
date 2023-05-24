@@ -1,6 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { verify } from "jsonwebtoken";
 import { AppError } from "../errors/AppError";
+import prisma from "../prisma";
 
 const validateTokenMiddleware = async (
   req: Request,
@@ -45,4 +46,27 @@ const verifyOwnerMiddleware = async (
     next();
   };
 
-export default {validateTokenMiddleware, verifyOwnerMiddleware}
+
+  const checkUniqueEmail = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const { id, email } = req.body;
+  
+    try {
+      const user = await prisma.user.findUnique({ where: { email } });
+  
+      if (user && user.id !== id) {
+        return res.status(400).json({ error: 'Email already exists' });
+      }
+  
+      next();
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  };
+
+  
+export default {validateTokenMiddleware, verifyOwnerMiddleware, checkUniqueEmail}
