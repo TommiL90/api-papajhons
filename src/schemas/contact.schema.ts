@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const phoneSchema = z.object({
   id: z.number().int(),
-  phone: z.string().length(11),
+  phone: z.string().length(10),
 });
 
 export const contactSchema = z.object({
@@ -22,7 +22,7 @@ export const reqCreateContactSchema = contactSchema.omit({
     userId: true,
     phones: true,
 }).extend({
-  phones: z.string().length(11).array(),
+  phones: z.string().length(10).array(),
 })
 
 export const updateContactSchema = reqCreateContactSchema.partial()
