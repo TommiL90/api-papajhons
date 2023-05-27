@@ -35,4 +35,5 @@ contactRouter.get(
   contactControllers.listContacts
 );
 
+
 export default contactRouter;

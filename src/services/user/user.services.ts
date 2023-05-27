@@ -7,22 +7,26 @@ import {
   TUsersList,
 } from "../../interfaces/user.interfaces";
 import prisma from "../../prisma";
-import { resCreateUserSchema, usersListSchema } from "../../schemas/user.schema";
+import {
+  resCreateUserSchema,
+  usersListSchema,
+} from "../../schemas/user.schema";
 import { AppError } from "../../errors/AppError";
 import { sign } from "jsonwebtoken";
+import { emit } from "process";
+import { User } from "@prisma/client";
 
 const createUserService = async (
   payload: TCreateUser
 ): Promise<TResCreateUser> => {
-
   const email = await prisma.user.findUnique({
-    where:{
-      email: payload.email
-    }
-  })
+    where: {
+      email: payload.email,
+    },
+  });
 
-  if(email){
-    throw new AppError("Email already in use", 409)
+  if (email) {
+    throw new AppError("Email already in use", 409);
   }
 
   const hashedPassword = hashSync(payload.password, 10);
@@ -70,23 +74,25 @@ const updateUserService = async (
 ): Promise<TResCreateUser> => {
   const user = await prisma.user.findFirst({
     where: {
-      id: id
-    }
+      id: id,
+    },
   });
 
-const updatedUser = await prisma.user.update({
-  where:{
-    id: id
-  },
-  data:{...user, ...payload}
-})
+  if (user?.name === payload.name) {
+    delete payload.name;
+  }
+
+  const updatedUser = await prisma.user.update({
+    where: {
+      id: id,
+    },
+    data: { ...user, ...payload },
+  });
 
   return resCreateUserSchema.parse(updatedUser);
 };
 
-
 const deleteUserService = async (idUser: number): Promise<void> => {
-
   await prisma.user.update({
     where: {
       id: idUser,
@@ -94,9 +100,8 @@ const deleteUserService = async (idUser: number): Promise<void> => {
     data: {
       deletedAt: new Date(),
     },
-  });  
-
-}
+  });
+};
 
 const getActiveUsers = async (): Promise<TUsersList> => {
   const activeUsers = await prisma.user.findMany({
@@ -105,6 +110,27 @@ const getActiveUsers = async (): Promise<TUsersList> => {
     },
   });
   return usersListSchema.parse(activeUsers);
-}; 
+};
 
-export default { createUserService, loginUserService, updateUserService, deleteUserService, getActiveUsers };
+const getOwnerUserService = async (idUser: number): Promise<User> => {
+  const user: User | null = await prisma.user.findFirst({
+    where: {
+      id: idUser,
+    },
+  });
+
+  if (!user) {
+    throw new AppError("User not found", 404);
+  }
+
+  return user;
+};
+
+export default {
+  createUserService,
+  loginUserService,
+  updateUserService,
+  deleteUserService,
+  getActiveUsers,
+  getOwnerUserService
+};

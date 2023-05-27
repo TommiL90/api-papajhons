@@ -1,9 +1,8 @@
 import { AppError } from "../../errors/AppError";
-import { TContact, TCreateContact } from "../../interfaces/contact.interfaces";
-import { TResCreateUser } from "../../interfaces/user.interfaces";
+import { TContact, TCreateContact, TUpdateContact } from "../../interfaces/contact.interfaces";
 import prisma from "../../prisma";
 import { contactSchema } from "../../schemas/contact.schema";
-import { resCreateUserSchema } from "../../schemas/user.schema";
+import { Phone } from "@prisma/client";
 
 const createContactService = async (
   payload: TCreateContact,
@@ -43,23 +42,45 @@ const createContactService = async (
 const updateContactService = async (
   userId: number,
   contactId: number,
-  payload: Partial<TCreateContact>
+  payload: Partial<TContact>
 ): Promise<TContact> => {
-  const { name, email, phones } = payload;
+  let updatedPhones: Phone[] = [];
+
+  if (payload.phones && payload.phones.length > 0) {
+    updatedPhones = await Promise.all(
+      payload.phones.map(async (phone) => {
+        const updatedPhone = await prisma.phone.update({
+          where: { id: phone.id },
+          data: { ...phone },
+        });
+        return updatedPhone;
+      })
+    );
+  }
+
+  const { phones, ...updatedPayload } = payload;
 
   const contact = await prisma.contact.findFirst({
-    where: { id: contactId, userId: userId }
+    where: { id: contactId, userId: userId },
   });
 
   if (!contact) {
     throw new AppError("Contact not found", 404);
   }
 
+  if (contact.name === updatedPayload.name) {
+    delete updatedPayload.name;
+  }
+
   const updatedContact = await prisma.contact.update({
     where: { id: contactId },
     data: {
-
-      name: name || contact.name,
+      ...updatedPayload,
+      phones: {
+        set: updatedPhones.map((phone) => ({
+          id: phone.id,
+        })),
+      },
     },
     include: { phones: true },
   });
@@ -68,6 +89,7 @@ const updateContactService = async (
 
   return contactSchema.parse(updatedContact);
 };
+
 
 
 const deleteContactService = async (

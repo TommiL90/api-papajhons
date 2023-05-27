@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { TContact, TCreateContact } from "../../interfaces/contact.interfaces";
+import { TContact, TCreateContact, TUpdateContact } from "../../interfaces/contact.interfaces";
 import contactServices from "../../services/contact/contact.services";
 import { TResCreateUser } from "../../interfaces/user.interfaces";
 
@@ -19,7 +19,7 @@ const updateContact = async (req: Request, res: Response) => {
   const contactId: number = Number(req.params.id);
   const userId = res.locals.userId;
 
-  const data: Partial<TCreateContact> = req.body;
+  const data: TUpdateContact = req.body;
 
   const updatedContact: TContact =
     await contactServices.updateContactService(userId, contactId, data);

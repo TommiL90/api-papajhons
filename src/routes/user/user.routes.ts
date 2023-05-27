@@ -34,5 +34,6 @@ userRouter.delete(
   userControllers.deleteUser
 );
 userRouter.get("", userControllers.listUsers);
+userRouter.get("/user", userControllers.rerieveUser)
 
 export default userRouter;
