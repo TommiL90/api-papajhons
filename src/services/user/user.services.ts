@@ -3,7 +3,6 @@ import {
   TCreateUser,
   TLogin,
   TResCreateUser,
-  TUser,
   TUsersList,
 } from "../../interfaces/user.interfaces";
 import prisma from "../../prisma";
@@ -112,7 +111,7 @@ const getActiveUsers = async (): Promise<TUsersList> => {
   return usersListSchema.parse(activeUsers);
 };
 
-const getOwnerUserService = async (idUser: number): Promise<User> => {
+const getOwnerUserService = async (idUser: number): Promise<TResCreateUser> => {
   const user: User | null = await prisma.user.findFirst({
     where: {
       id: idUser,
@@ -123,7 +122,7 @@ const getOwnerUserService = async (idUser: number): Promise<User> => {
     throw new AppError("User not found", 404);
   }
 
-  return user;
+  return resCreateUserSchema.parse(user);
 };
 
 export default {

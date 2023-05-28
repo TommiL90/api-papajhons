@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { TContact, TCreateContact, TUpdateContact } from "../../interfaces/contact.interfaces";
 import contactServices from "../../services/contact/contact.services";
-import { TResCreateUser } from "../../interfaces/user.interfaces";
+
 
 const createContact = async (req: Request, res: Response) => {
   const data: TCreateContact = req.body;
@@ -21,7 +21,7 @@ const updateContact = async (req: Request, res: Response) => {
 
   const data: TUpdateContact = req.body;
 
-  const updatedContact: TContact =
+  const updatedContact: TUpdateContact =
     await contactServices.updateContactService(userId, contactId, data);
 
   return res.status(200).json(updatedContact);

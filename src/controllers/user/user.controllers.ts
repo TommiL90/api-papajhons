@@ -30,7 +30,7 @@ const listUsers = async (req: Request, res: Response) => {
 const rerieveUser = async (req: Request, res: Response) => {
   const id: number = res.locals.id;
 
-  const user: TUser = await userServices.getOwnerUserService(id);
+  const user: Omit<TUser, 'password'> = await userServices.getOwnerUserService(id);
 
   return res.status(200).json(user);
 }

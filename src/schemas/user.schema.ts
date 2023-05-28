@@ -6,9 +6,9 @@ export const userSchema = z.object({
     name: z.string().max(45),
     email: z.string().email().max(100),
     password: z.string().max(120),
-    createdAt: z.date(),
-    updatedAt: z.date().nullish(),
-    deletedAt: z.date().nullish(),
+    createdAt: z.string().or(z.date()).transform((val) => new Date(val)),
+    updatedAt: z.string().or(z.date()).transform((val) => new Date(val)).nullish(),
+    deletedAt: z.string().or(z.date()).transform((val) => (val ? new Date(val) : null)).nullish(),
     contacts:  z.array(contactSchema).nullish(),
   });
 

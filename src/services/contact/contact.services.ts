@@ -1,7 +1,14 @@
 import { AppError } from "../../errors/AppError";
-import { TContact, TCreateContact, TUpdateContact } from "../../interfaces/contact.interfaces";
+import {
+  TContact,
+  TCreateContact,
+  TUpdateContact,
+} from "../../interfaces/contact.interfaces";
 import prisma from "../../prisma";
-import { contactSchema } from "../../schemas/contact.schema";
+import {
+  contactSchema,
+  updateContactSchema,
+} from "../../schemas/contact.schema";
 import { Phone } from "@prisma/client";
 
 const createContactService = async (
@@ -42,8 +49,8 @@ const createContactService = async (
 const updateContactService = async (
   userId: number,
   contactId: number,
-  payload: Partial<TContact>
-): Promise<TContact> => {
+  payload: TUpdateContact
+): Promise<TUpdateContact> => {
   let updatedPhones: Phone[] = [];
 
   if (payload.phones && payload.phones.length > 0) {
@@ -75,22 +82,17 @@ const updateContactService = async (
   const updatedContact = await prisma.contact.update({
     where: { id: contactId },
     data: {
-      ...updatedPayload,
-      phones: {
-        set: updatedPhones.map((phone) => ({
-          id: phone.id,
-        })),
-      },
+      ...contact,
+      name: updatedPayload.name ? updatedPayload.name : contact.name,
+      email: updatedPayload.email ? updatedPayload.email : contact.email,
     },
     include: { phones: true },
   });
 
   console.log(updatedContact);
 
-  return contactSchema.parse(updatedContact);
+  return updateContactSchema.parse(updatedContact);
 };
-
-
 
 const deleteContactService = async (
   userId: number,
@@ -115,6 +117,9 @@ const getContactsService = async (idUser: number): Promise<TContact[]> => {
     include: { phones: true },
   });
 
+  if (!contacts) {
+    throw new AppError("Contacts not found", 404);
+  }
   return contacts;
 };
 
