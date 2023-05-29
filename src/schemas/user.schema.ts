@@ -3,7 +3,7 @@ import { contactSchema } from "./contact.schema";
 
 export const userSchema = z.object({
     id: z.number().positive().int(),
-    name: z.string().max(45),
+    name: z.string().max(50),
     email: z.string().email().max(100),
     password: z.string().max(120),
     createdAt: z.string().or(z.date()).transform((val) => new Date(val)),

@@ -33,9 +33,4 @@ export const updateContactSchema = z.object({
   name: z.string().optional(),
   email: z.string().email().optional(),
   phones: z.array(phoneSchema).optional(),
-  registrationDate: z
-    .string()
-    .or(z.date())
-    .transform((val) => new Date(val))
-    .optional(),
 });

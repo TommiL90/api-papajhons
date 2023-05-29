@@ -51,20 +51,27 @@ const updateContactService = async (
   contactId: number,
   payload: TUpdateContact
 ): Promise<TUpdateContact> => {
-  let updatedPhones: Phone[] = [];
 
   if (payload.phones && payload.phones.length > 0) {
-    updatedPhones = await Promise.all(
+    await Promise.all(
       payload.phones.map(async (phone) => {
-        const updatedPhone = await prisma.phone.update({
-          where: { id: phone.id },
-          data: { ...phone },
-        });
-        return updatedPhone;
+        const retrievePhone = await prisma.phone.findUnique({
+          where: {
+            id: phone.id
+          }
+        })
+        if (!retrievePhone){
+          throw new AppError("Phone not found", 404)
+        }
+        await prisma.phone.update({
+          where: {
+            id: phone.id},
+            data: {...retrievePhone, ...phone}
+        })
       })
     );
   }
-
+  console.log('opaaaaaa')
   const { phones, ...updatedPayload } = payload;
 
   const contact = await prisma.contact.findFirst({
@@ -88,8 +95,6 @@ const updateContactService = async (
     },
     include: { phones: true },
   });
-
-  console.log(updatedContact);
 
   return updateContactSchema.parse(updatedContact);
 };
