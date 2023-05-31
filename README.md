@@ -235,7 +235,7 @@ Esse serviço precisa possuir uma API REST para que os demais serviços consigam
 
 ```json
 {
-  "name": "exemplo 1: PATCH"
+  "email": "exemplo 1: PATCH"
 }
 ````
 
@@ -247,7 +247,7 @@ Esse serviço precisa possuir uma API REST para que os demais serviços consigam
 }
 ```
 
-### **DELETE: /movies/&lt;id&gt;**
+### **DELETE: /users/&lt;id&gt;**
 
 **_Regras de negócio_**
 
