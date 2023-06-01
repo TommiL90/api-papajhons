@@ -54,7 +54,7 @@ As tabelas devem seguir as seguintes especificações:
 
 Esse serviço precisa possuir uma API REST para que os demais serviços consigam criar, listar, atualizar e deletar filmes de um banco de dados.
 
-- O banco de dados deve ser **PostgreSQL**.
+- O banco de dados deve ser **PostgreSQL**, e deve estar hospedado em www.supabase.com.
 - O diagrama sobre a tabla de ver feito.
 
 ### **POST: /users/register**
