@@ -5,7 +5,7 @@ import contactServices from "../../services/contact/contact.services";
 
 const createContact = async (req: Request, res: Response) => {
   const data: TCreateContact = req.body;
-  const userId = res.locals.userId;
+  const userId = Number(res.locals.userId);
 
   const newUser: TContact = await contactServices.createContactService(
     data,
@@ -17,7 +17,7 @@ const createContact = async (req: Request, res: Response) => {
 
 const updateContact = async (req: Request, res: Response) => {
   const contactId: number = Number(req.params.id);
-  const userId = res.locals.userId;
+  const userId = Number(res.locals.userId);
 
   const data: TUpdateContact = req.body;
 
@@ -29,14 +29,14 @@ const updateContact = async (req: Request, res: Response) => {
 
 const deleteContact = async (req: Request, res: Response) => {
   const contactId: number = Number(req.params.id);
-  const userId = res.locals.userId;
+  const userId = Number(res.locals.userId);
   await contactServices.deleteContactService(userId, contactId);
 
   return res.status(200).send();
 };
 
 const listContacts = async (req: Request, res: Response) => {
-  const userId = res.locals.userId;
+  const userId = Number(res.locals.userId);
 
   const contacts = await contactServices.getContactsService(userId);
 

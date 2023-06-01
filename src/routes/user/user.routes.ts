@@ -34,6 +34,10 @@ userRouter.delete(
   userControllers.deleteUser
 );
 userRouter.get("", userControllers.listUsers);
-userRouter.get("/user", userControllers.rerieveUser)
+userRouter.get(
+  "/user",
+  userMiddlewares.validateTokenMiddleware,
+  userControllers.rerieveUser
+);
 
 export default userRouter;

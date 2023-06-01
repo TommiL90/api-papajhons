@@ -28,7 +28,7 @@ const listUsers = async (req: Request, res: Response) => {
 };
 
 const rerieveUser = async (req: Request, res: Response) => {
-  const id: number = res.locals.id;
+  const id: number = Number(res.locals.userId);
 
   const user: Omit<TUser, 'password'> = await userServices.getOwnerUserService(id);
 

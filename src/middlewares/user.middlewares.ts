@@ -22,8 +22,9 @@ const validateTokenMiddleware = async (
       if (error) {
         throw new AppError(error.message, 401);
       }
-      
-      res.locals.userId = Number(decoded.sub);
+
+      res.locals.userId = decoded.sub;
+
       
       return next();
     }

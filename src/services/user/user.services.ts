@@ -61,7 +61,7 @@ const loginUserService = async (payload: TLogin): Promise<string> => {
   const token: string = sign(
     { randomKey: "randomValue" },
     String(process.env.SECRET_KEY),
-    { expiresIn: "24h", subject: String(user.id) }
+    { expiresIn: "48h", subject: String(user.id) }
   );
 
   return token;
