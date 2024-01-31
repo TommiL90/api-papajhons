@@ -1,46 +1,49 @@
-import { Request, Response } from "express";
-import { TContact, TCreateContact, TUpdateContact } from "../../interfaces/contact.interfaces";
-import contactServices from "../../services/contact/contact.services";
-
+import { Request, Response } from 'express'
+import {
+  TContact,
+  TCreateContact,
+  TUpdateContact,
+} from '../../interfaces/contact.interfaces'
+import contactServices from '../../services/contact/contact.services'
 
 const createContact = async (req: Request, res: Response) => {
-  const data: TCreateContact = req.body;
-  const userId = Number(res.locals.userId);
+  const data: TCreateContact = req.body
+  const userId = Number(res.locals.userId)
 
   const newUser: TContact = await contactServices.createContactService(
     data,
-    userId
-  );
+    userId,
+  )
 
-  return res.status(201).json(newUser);
-};
+  return res.status(201).json(newUser)
+}
 
 const updateContact = async (req: Request, res: Response) => {
-  const contactId: number = Number(req.params.id);
-  const userId = Number(res.locals.userId);
+  const contactId = Number(req.params.id)
+  const userId = Number(res.locals.userId)
 
-  const data: TUpdateContact = req.body;
+  const data: TUpdateContact = req.body
 
   const updatedContact: TUpdateContact =
-    await contactServices.updateContactService(userId, contactId, data);
+    await contactServices.updateContactService(userId, contactId, data)
 
-  return res.status(200).json(updatedContact);
-};
+  return res.status(200).json(updatedContact)
+}
 
 const deleteContact = async (req: Request, res: Response) => {
-  const contactId: number = Number(req.params.id);
-  const userId = Number(res.locals.userId);
-  await contactServices.deleteContactService(userId, contactId);
+  const contactId = Number(req.params.id)
+  const userId = Number(res.locals.userId)
+  await contactServices.deleteContactService(userId, contactId)
 
-  return res.status(200).send();
-};
+  return res.status(200).send()
+}
 
 const listContacts = async (req: Request, res: Response) => {
-  const userId = Number(res.locals.userId);
+  const userId = Number(res.locals.userId)
 
-  const contacts = await contactServices.getContactsService(userId);
+  const contacts = await contactServices.getContactsService(userId)
 
-  return res.status(200).json(contacts);
-};
+  return res.status(200).json(contacts)
+}
 
-export default { createContact, updateContact, deleteContact, listContacts };
+export default { createContact, updateContact, deleteContact, listContacts }

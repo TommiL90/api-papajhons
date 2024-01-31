@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { verify } from "jsonwebtoken";
 import { AppError } from "../errors/AppError";
-import prisma from "../prisma";
+import prisma from "../lib/prisma";
 
 const validateTokenMiddleware = async (
   req: Request,

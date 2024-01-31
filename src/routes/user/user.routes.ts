@@ -1,43 +1,43 @@
-import { Router } from "express";
-import userControllers from "../../controllers/user/user.controllers";
-import middlewares from "../../middlewares";
+import { Router } from 'express'
+import userControllers from '../../controllers/user/user.controllers'
+import middlewares from '../../middlewares'
 import {
   createUserSchema,
   loginSchema,
   updateUserSchema,
-} from "../../schemas/user.schema";
-import userMiddlewares from "../../middlewares/user.middlewares";
+} from '../../schemas/users-schema'
+import userMiddlewares from '../../middlewares/user.middlewares'
 
-const userRouter: Router = Router();
+const userRouter: Router = Router()
 
 userRouter.post(
-  "/register",
+  '/register',
   middlewares.validateBodyMiddleware(createUserSchema),
-  userControllers.createUser
-);
+  userControllers.createUser,
+)
 userRouter.post(
-  "/login",
+  '/login',
   middlewares.validateBodyMiddleware(loginSchema),
-  userControllers.loginUser
-);
+  userControllers.loginUser,
+)
 userRouter.patch(
-  "/:id",
+  '/:id',
   userMiddlewares.validateTokenMiddleware,
   userMiddlewares.verifyOwnerMiddleware,
   middlewares.validateBodyMiddleware(updateUserSchema),
-  userControllers.updateUser
-);
+  userControllers.updateUser,
+)
 userRouter.delete(
-  "/:id",
+  '/:id',
   userMiddlewares.validateTokenMiddleware,
   userMiddlewares.verifyOwnerMiddleware,
-  userControllers.deleteUser
-);
-userRouter.get("", userControllers.listUsers);
+  userControllers.deleteUser,
+)
+userRouter.get('', userControllers.listUsers)
 userRouter.get(
-  "/user",
+  '/user',
   userMiddlewares.validateTokenMiddleware,
-  userControllers.rerieveUser
-);
+  userControllers.rerieveUser,
+)
 
-export default userRouter;
+export default userRouter

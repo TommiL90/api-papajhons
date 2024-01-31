@@ -4,7 +4,7 @@ import {
   TCreateContact,
   TUpdateContact,
 } from "../../interfaces/contact.interfaces";
-import prisma from "../../prisma";
+import prisma from "../../lib/prisma";
 import {
   contactSchema,
   updateContactSchema,

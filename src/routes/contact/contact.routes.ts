@@ -1,39 +1,38 @@
-import { Router } from "express";
-import contactControllers from "../../controllers/user/contact.controllers";
-import userMiddlewares from "../../middlewares/user.middlewares";
+import { Router } from 'express'
+import contactControllers from '../../controllers/user/contact.controllers'
+import userMiddlewares from '../../middlewares/user.middlewares'
 import {
   reqCreateContactSchema,
   updateContactSchema,
-} from "../../schemas/contact.schema";
-import middlewares from "../../middlewares";
+} from '../../schemas/contact.schema'
+import middlewares from '../../middlewares'
 
-const contactRouter: Router = Router();
+const contactRouter: Router = Router()
 
 contactRouter.post(
-  "",
+  '',
   userMiddlewares.validateTokenMiddleware,
   middlewares.validateBodyMiddleware(reqCreateContactSchema),
-  contactControllers.createContact
-);
+  contactControllers.createContact,
+)
 
 contactRouter.patch(
-  "/:id",
+  '/:id',
   userMiddlewares.validateTokenMiddleware,
   middlewares.validateBodyMiddleware(updateContactSchema),
-  contactControllers.updateContact
-);
+  contactControllers.updateContact,
+)
 
 contactRouter.delete(
-  "/:id",
+  '/:id',
   userMiddlewares.validateTokenMiddleware,
-  contactControllers.deleteContact
-);
+  contactControllers.deleteContact,
+)
 
 contactRouter.get(
-  "",
+  '',
   userMiddlewares.validateTokenMiddleware,
-  contactControllers.listContacts
-);
+  contactControllers.listContacts,
+)
 
-
-export default contactRouter;
+export default contactRouter

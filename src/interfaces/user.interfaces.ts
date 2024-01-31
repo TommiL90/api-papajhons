@@ -5,7 +5,7 @@ import {
   resCreateUserSchema,
   userSchema,
   usersListSchema,
-} from '../schemas/user.schema'
+} from '../schemas/users-schema'
 
 export type TUser = z.infer<typeof userSchema>
 export type TCreateUser = z.infer<typeof createUserSchema>
