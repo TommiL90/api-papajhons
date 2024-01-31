@@ -1,5 +1,11 @@
-import { z } from "zod";
-import { createUserSchema, loginSchema, resCreateUserSchema, userSchema, usersListSchema } from "../schemas/user.schema"
+import { z } from 'zod'
+import {
+  createUserSchema,
+  loginSchema,
+  resCreateUserSchema,
+  userSchema,
+  usersListSchema,
+} from '../schemas/user.schema'
 
 export type TUser = z.infer<typeof userSchema>
 export type TCreateUser = z.infer<typeof createUserSchema>
