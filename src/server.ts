@@ -2,7 +2,7 @@ import app from './app';
 import 'dotenv/config';
 import prisma from './prisma';
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3333;
 
 app.locals.prisma = prisma;
 
