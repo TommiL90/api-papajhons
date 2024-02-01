@@ -1,7 +1,7 @@
 import prisma from '@/lib/prisma'
 import { Prisma } from '@prisma/client'
 import { UsersRepository } from '../users-repository'
-import { TUser } from '@/interfaces/user.interfaces'
+import { TUser } from '@/interfaces/users-interfaces-schema'
 
 export class PrismaUserRepository implements UsersRepository {
   async create(data: Prisma.UserCreateInput) {
@@ -20,7 +20,19 @@ export class PrismaUserRepository implements UsersRepository {
     return user
   }
 
-  findByEmailForAuth(email: string): Promise<TUser | null> {
-    throw new Error('Method not implemented.')
+  async findByEmailForAuth(email: string) {
+    const user = await prisma.user.findUnique({
+      where: { email },
+    })
+
+    return user
+  }
+
+  async findById(id: string) {
+    const user = await prisma.user.findUnique({
+      where: { id },
+    })
+
+    return user
   }
 }

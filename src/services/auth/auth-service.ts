@@ -1,6 +1,6 @@
 import { env } from '@/env'
 import { AppError } from '@/errors/AppError'
-import { TLogin } from '@/interfaces/user.interfaces'
+import { TLogin } from '@/interfaces/users-interfaces-schema'
 import { UsersRepository } from '@/repositories/users-repository'
 import { compareSync } from 'bcryptjs'
 

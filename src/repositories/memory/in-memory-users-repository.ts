@@ -2,7 +2,7 @@ import {
   TCreateUser,
   TResCreateUser,
   TUser,
-} from '@/interfaces/user.interfaces'
+} from '@/interfaces/users-interfaces-schema'
 import { UsersRepository } from '../users-repository'
 import { Role } from '@prisma/client'
 import { randomUUID } from 'node:crypto'
@@ -46,13 +46,13 @@ export class InMemoryUsersRepository implements UsersRepository {
     return user
   }
 
-  // async findById(id: string) {
-  //   const user = this.items.find((item) => item.id === id)
+  async findById(id: string) {
+    const user = this.items.find((item) => item.id === id)
 
-  //   if (!user) {
-  //     return null
-  //   }
+    if (!user) {
+      return null
+    }
 
-  //   return user
-  // }
+    return user
+  }
 }

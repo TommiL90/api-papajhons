@@ -1,5 +1,8 @@
 import { AppError } from '@/errors/AppError'
-import { TCreateUser, TResCreateUser } from '@/interfaces/user.interfaces'
+import {
+  TCreateUser,
+  TResCreateUser,
+} from '@/interfaces/users-interfaces-schema'
 import { UsersRepository } from '@/repositories/users-repository'
 import { resCreateUserSchema } from '@/schemas/users-schema'
 import { hashSync } from 'bcryptjs'
@@ -28,6 +31,16 @@ export class UserService {
     const newUser = resCreateUserSchema.parse(data)
 
     return newUser
+  }
+
+  findById = async (id: string): Promise<TResCreateUser> => {
+    const user = await this.userRepository.findById(id)
+
+    if (!user) {
+      throw new AppError('User not found', 404)
+    }
+
+    return resCreateUserSchema.parse(user)
   }
 }
 

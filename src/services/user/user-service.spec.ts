@@ -50,4 +50,24 @@ describe('Auth service', () => {
       expect(error).toBeInstanceOf(AppError)
     }
   })
+
+  it('should be able to get a user profile', async () => {
+    const user = await userService.create({
+      name: 'test',
+      email: 'test@mail.com',
+      password: '123456',
+    })
+
+    const profile = await userService.findById(user.id)
+
+    expect(profile.name).toEqual('test')
+  })
+
+  it('should not be able to get a user profile with invalid id', async () => {
+    try {
+      await userService.findById('invalidId')
+    } catch (error) {
+      expect(error).toBeInstanceOf(AppError)
+    }
+  })
 })

@@ -2,7 +2,7 @@ import { expect, describe, it, beforeEach } from 'vitest'
 import { InMemoryUsersRepository } from '@/repositories/memory/in-memory-users-repository'
 import { UserService } from '@/services/user/users-service'
 import { AuthService } from './auth-service'
-import { TCreateUser } from '@/interfaces/user.interfaces'
+import { TCreateUser } from '@/interfaces/users-interfaces-schema'
 
 let userRepository: InMemoryUsersRepository
 let userService: UserService

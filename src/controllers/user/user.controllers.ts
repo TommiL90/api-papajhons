@@ -1,25 +1,28 @@
 import { Request, Response } from 'express'
-import { PrismaUserRepository } from '@/repositories/prisma/prisma-user-repository'
-import { TCreateUser, TResCreateUser } from '@/interfaces/user.interfaces'
-import { UserService } from '@/services/user/users-service'
+import {
+  TCreateUser,
+  TResCreateUser,
+} from '@/interfaces/users-interfaces-schema'
+import { makeCreateUser } from '@/services/factories/make-create-user'
+import { makeAuthUserService } from '@/services/factories/make-auth-service'
 
 const createUser = async (req: Request, res: Response) => {
   const data: TCreateUser = req.body
 
-  const userRepository = new PrismaUserRepository()
+  const createUserService = makeCreateUser()
 
-  const userService = new UserService(userRepository)
-
-  const newUser: TResCreateUser = await userService.create(data)
+  const newUser: TResCreateUser = await createUserService(data)
 
   return res.status(201).json(newUser)
 }
 
-// const loginUser = async (req: Request, res: Response) => {
-//   const token: string = await userServices.loginUserService(req.body)
+const authUser = async (req: Request, res: Response) => {
+  const authService = makeAuthUserService()
 
-//   return res.status(200).json({ token })
-// }
+  const token: string = await authService(req.body)
+
+  return res.status(200).json({ token })
+}
 
 // const listUsers = async (req: Request, res: Response) => {
 //   const userList: TUsersList = await userServices.getActiveUsers()
