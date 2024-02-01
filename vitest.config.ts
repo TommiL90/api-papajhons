@@ -1,16 +1,9 @@
-import swc from 'unplugin-swc'
 import { defineConfig } from 'vitest/config'
-import tsConfigPaths from 'vite-tsconfig-paths'
+import tsconfigPaths from 'vite-tsconfig-paths'
 
 export default defineConfig({
+  plugins: [tsconfigPaths()],
   test: {
-    globals: true,
-    root: './',
+    environmentMatchGlobs: [['src/http/controllers/**', 'prisma']],
   },
-  plugins: [
-    tsConfigPaths(),
-    swc.vite({
-      module: { type: 'es6' },
-    }),
-  ],
 })
