@@ -4,11 +4,14 @@ import { compareSync } from 'bcryptjs'
 import { InMemoryUsersRepository } from '@/repositories/memory/in-memory-users-repository'
 import { AppError } from '@/errors/AppError'
 
+let userRepository: InMemoryUsersRepository
+let userService: UserService
 describe('Auth service', () => {
+  beforeEach(() => {
+    userRepository = new InMemoryUsersRepository()
+    userService = new UserService(userRepository)
+  })
   it('should be able to yo hash user password upon registration', async () => {
-    const userRepository = new InMemoryUsersRepository()
-    const userService = new UserService(userRepository)
-
     const password = '123456'
     const hashedPassword = await userService.hashPassword(password)
 
@@ -18,9 +21,6 @@ describe('Auth service', () => {
     expect(isPasswordCorrectlyHashed).toBe(true)
   })
   it('should be able to register a user', async () => {
-    const userRepository = new InMemoryUsersRepository()
-    const userService = new UserService(userRepository)
-
     const user = await userService.create({
       name: 'test',
       email: 'test@mail.com',
@@ -34,10 +34,7 @@ describe('Auth service', () => {
   })
 
   it('should not be able to register with same email twice', async () => {
-    const userRepository = new InMemoryUsersRepository()
-    const userService = new UserService(userRepository)
-
-    const user = await userService.create({
+    await userService.create({
       name: 'test',
       email: 'test@mail.com',
       password: '123456',

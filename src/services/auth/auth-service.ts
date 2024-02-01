@@ -1,12 +1,13 @@
 import { env } from '@/env'
 import { AppError } from '@/errors/AppError'
 import { TLogin } from '@/interfaces/user.interfaces'
-import { UserRepository } from '@/repositories/users-repository'
-import { compare } from 'bcryptjs'
+import { UsersRepository } from '@/repositories/users-repository'
+import { compareSync } from 'bcryptjs'
+
 import { sign } from 'jsonwebtoken'
 
 export class AuthService {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private userRepository: UsersRepository) {}
 
   login = async (payload: TLogin): Promise<string> => {
     const user = await this.userRepository.findByEmailForAuth(payload.email)
@@ -15,9 +16,9 @@ export class AuthService {
       throw new AppError('Invalid credentials', 403)
     }
 
-    const pwdMatch: boolean = await compare(payload.password, user.password)
+    const isPasswordCorrectlyHashed = compareSync(payload.email, user.password)
 
-    if (!pwdMatch) {
+    if (!isPasswordCorrectlyHashed) {
       throw new AppError('Invalid credentials', 403)
     }
 

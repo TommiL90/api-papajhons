@@ -2,7 +2,7 @@ import { AppError } from '@/errors/AppError'
 import { TCreateUser, TResCreateUser } from '@/interfaces/user.interfaces'
 import { UsersRepository } from '@/repositories/users-repository'
 import { resCreateUserSchema } from '@/schemas/users-schema'
-import { compare, hashSync } from 'bcryptjs'
+import { hashSync } from 'bcryptjs'
 
 export class UserService {
   constructor(private userRepository: UsersRepository) {}
