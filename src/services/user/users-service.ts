@@ -1,11 +1,15 @@
 import { AppError } from '@/errors/AppError'
 import { TCreateUser, TResCreateUser } from '@/interfaces/user.interfaces'
-import { UserRepository } from '@/repositories/users-repository'
+import { UsersRepository } from '@/repositories/users-repository'
 import { resCreateUserSchema } from '@/schemas/users-schema'
 import { compare, hashSync } from 'bcryptjs'
 
 export class UserService {
-  constructor(private userRepository: UserRepository) {}
+  constructor(private userRepository: UsersRepository) {}
+
+  hashPassword = async (password: string): Promise<string> => {
+    return hashSync(password, 10)
+  }
 
   create = async (payload: TCreateUser): Promise<TResCreateUser> => {
     const email = await this.userRepository.findByEmail(payload.email)
@@ -14,7 +18,7 @@ export class UserService {
       throw new AppError('Email already exists', 409)
     }
 
-    const hashedPassword = hashSync(payload.password, 10)
+    const hashedPassword = await this.hashPassword(payload.email)
 
     const data = await this.userRepository.create({
       ...payload,

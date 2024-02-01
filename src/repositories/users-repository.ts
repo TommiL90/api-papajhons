@@ -4,7 +4,7 @@ import {
   TUser,
 } from '@/interfaces/user.interfaces'
 
-export interface UserRepository {
+export interface UsersRepository {
   create(data: TCreateUser): Promise<TResCreateUser>
 
   findByEmail(email: string): Promise<TResCreateUser | null>

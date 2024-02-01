@@ -1,5 +1,5 @@
 {
-  "name": "api-papajhons",
+  "name": "api-GymPass",
   "version": "0.0.1",
   "description": "Simples APIRest for training express, typescript and prisma",
   "main": "dist/index.js",
@@ -9,14 +9,13 @@
     "test:create-prisma-environment": "npm link ./prisma/vitest-environment-prisma",
     "test:install-prisma-environment": "npm link vitest-environment-prisma",
     "build": "tsup src",
-    "test": "vitest run --dir src/use-cases",
-    "test:watch": "vitest --dir src/use-cases",
+    "test": "vitest run --dir src/services",
+    "test:watch": "vitest --dir src/services",
     "pretest:e2e": "run-s test:create-prisma-environment test:install-prisma-environment",
     "test:e2e": "vitest run --dir src/http",
     "test:e2e:watch": "vitest --dir src/http",
     "test:coverage": "vitest run --coverage",
     "test:ui": "vitest --ui"
-    
   },
   "repository": {
     "type": "git",
@@ -37,7 +36,7 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "^20.2.3",
     "@types/supertest": "6.0.2",
-    "@vitest/coverage-c8": "0.33.0",
+    "@vitest/coverage-v8": "1.2.2",
     "@vitest/ui": "1.2.2",
     "eslint": "^8.56.0",
     "prisma": "^5.9.0",
