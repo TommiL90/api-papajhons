@@ -33,7 +33,7 @@ export class InMemoryCategoryRepository implements CategoryRepository {
   }
 
   async findAll() {
-    return Promise.resolve(this.items) as Promise<Category[]>
+    return this.items
   }
 
   async update(id: string, data: UpdateCategory) {

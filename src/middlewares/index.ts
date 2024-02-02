@@ -8,9 +8,8 @@ export const validateBodyMiddleware =
     response: Response,
     next: NextFunction,
   ): Response | void => {
-    console.log('paso 1')
     const validatedBody = schema.parse(request.body)
-    console.log('paso 2')
+
     request.body = validatedBody
 
     return next()

@@ -15,10 +15,6 @@ describe('Auth service', () => {
   beforeEach(() => {
     categoryRepository = new InMemoryCategoryRepository()
     categoryService = new CategoryService(categoryRepository)
-
-    const newCategory = {
-      name: 'New Category',
-    }
   })
 
   it('should be able to register a category', async () => {
@@ -40,14 +36,6 @@ describe('Auth service', () => {
 
     expect(findedCategory!.name).toEqual('new Category')
     expect(findedCategory!.id).toEqual(category.id)
-  })
-
-  it('should not be able to get a category profile with invalid id', async () => {
-    try {
-      await categoryService.findById('invalidId')
-    } catch (error) {
-      expect(error).toBeInstanceOf(AppError)
-    }
   })
 
   it('should throw a AppError when an invalid ID is provided', async () => {

@@ -36,8 +36,7 @@ const verifyOwnerMiddleware = async (
 ): Promise<Response | void> => {
   const idParam = Number(req.params.id)
   const idUser: number = res.locals.userId
-  console.log(idUser)
-  console.log(idParam)
+
   if (idParam !== idUser) {
     throw new AppError('not authorized', 403)
   }

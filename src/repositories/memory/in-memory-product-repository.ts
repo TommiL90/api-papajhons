@@ -50,6 +50,7 @@ export class InMemoryProductRepository implements ProductsRepository {
   }
 
   async findAll() {
+    // console.log(this.items, 'aquiiiiiiii')
     return Promise.resolve(this.items) as Promise<Product[]>
   }
 

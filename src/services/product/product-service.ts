@@ -15,7 +15,6 @@ export class ProductsService {
     const findProduct = await this.productsRepository.findOneBySku(
       createProduct.sku,
     )
-
     if (findProduct) {
       throw new AppError('Product already exists')
     }
@@ -27,7 +26,7 @@ export class ProductsService {
     return this.productsRepository.findAll()
   }
 
-  findOne(id: string) {
+  findById(id: string) {
     const product = this.productsRepository.findOneById(id)
     if (!product) {
       throw new AppError('Product not found')
@@ -43,7 +42,7 @@ export class ProductsService {
     return product
   }
 
-  remove(id: string) {
+  delete(id: string) {
     const deletedProduct = this.productsRepository.delete(id)
     if (!deletedProduct) {
       throw new AppError('Product not found')

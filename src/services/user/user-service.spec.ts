@@ -1,11 +1,10 @@
-import { test, expect, describe, it, beforeEach } from 'vitest'
+import { expect, describe, it, beforeEach } from 'vitest'
 import { UserService } from './users-service'
 import { compareSync } from 'bcryptjs'
 import { InMemoryUsersRepository } from '@/repositories/memory/in-memory-users-repository'
 import { AppError } from '@/errors/AppError'
 import {
   UpdateUser,
-  User,
   UserWithoutPassword,
 } from '@/interfaces/users-interfaces-schema'
 
@@ -126,16 +125,10 @@ describe('Auth service', () => {
 
   it('should not be able update a inexistent user', async () => {
     const categoryId = 'invalidId'
-    const createdUser = await userService.create({
-      name: 'test',
-      email: 'test@mail.com',
-      password: '123456',
-    })
-    console.log(createdUser, '1')
+
     try {
       await userService.update(categoryId, { name: 'Test 2' })
     } catch (error) {
-      console.log(error)
       expect(error).toBeInstanceOf(AppError)
     }
   })
