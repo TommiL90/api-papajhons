@@ -3,6 +3,11 @@ import { UserService } from './users-service'
 import { compareSync } from 'bcryptjs'
 import { InMemoryUsersRepository } from '@/repositories/memory/in-memory-users-repository'
 import { AppError } from '@/errors/AppError'
+import {
+  UpdateUser,
+  User,
+  UserWithoutPassword,
+} from '@/interfaces/users-interfaces-schema'
 
 let userRepository: InMemoryUsersRepository
 let userService: UserService
@@ -66,6 +71,95 @@ describe('Auth service', () => {
   it('should not be able to get a user profile with invalid id', async () => {
     try {
       await userService.findById('invalidId')
+    } catch (error) {
+      expect(error).toBeInstanceOf(AppError)
+    }
+  })
+
+  it('should be able to return an array of users', async () => {
+    const result = await userService.findAll()
+
+    expect(result).toBeDefined()
+    expect(Array.isArray(result)).toBe(true)
+  })
+
+  it('should be able return a user by ID', async () => {
+    const createdUser = await userService.create({
+      name: 'test',
+      email: 'test@mail.com',
+      password: '123456',
+    })
+
+    const result = await userService.findById(createdUser.id)
+
+    expect(result.id).toEqual(createdUser.id)
+  })
+
+  it('should throw a AppError when an invalid ID is provided', async () => {
+    const taskId = 'invalidId'
+
+    try {
+      await userService.findById(taskId)
+    } catch (error) {
+      expect(error).toBeInstanceOf(AppError)
+    }
+  })
+
+  it('should be able update a user', async () => {
+    const createdUser = await userService.create({
+      name: 'test',
+      email: 'test@mail.com',
+      password: '123456',
+    })
+
+    const userId = createdUser.id
+    const updateUser: UpdateUser = {
+      ...createdUser,
+      name: 'new name',
+    }
+
+    const res = await userService.update(userId, updateUser)
+
+    expect(res.id).toEqual(userId)
+    expect(res.name).toEqual('new name')
+  })
+
+  it('should not be able update a inexistent user', async () => {
+    const categoryId = 'invalidId'
+    const createdUser = await userService.create({
+      name: 'test',
+      email: 'test@mail.com',
+      password: '123456',
+    })
+    console.log(createdUser, '1')
+    try {
+      await userService.update(categoryId, { name: 'Test 2' })
+    } catch (error) {
+      console.log(error)
+      expect(error).toBeInstanceOf(AppError)
+    }
+  })
+  it('should be able delete a user', async () => {
+    const res: UserWithoutPassword = await userService.create({
+      name: 'test',
+      email: 'test@mail.com',
+      password: '123456',
+    })
+    const userId = res.id
+
+    await userService.delete(userId)
+
+    try {
+      await userService.findById(userId)
+    } catch (error) {
+      expect(error).toBeInstanceOf(AppError)
+    }
+  })
+
+  it('should not be able to delete a inexistent category', async () => {
+    const categoryId = 'invalidId'
+    try {
+      await userService.delete(categoryId)
     } catch (error) {
       expect(error).toBeInstanceOf(AppError)
     }

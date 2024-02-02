@@ -1,5 +1,6 @@
 import {
   CreateUser,
+  UpdateUser,
   User,
   UserWithoutPassword,
 } from '@/interfaces/users-interfaces-schema'
@@ -53,5 +54,31 @@ export class InMemoryUsersRepository implements UsersRepository {
     }
 
     return user
+  }
+
+  async findAll(): Promise<User[]> {
+    return this.items
+  }
+
+  async update(id: string, data: UpdateUser): Promise<User> {
+    const userIndex = this.items.findIndex((user) => user.id === id)
+
+    const user = (this.items[userIndex] = {
+      ...this.items[userIndex],
+
+      name: data.name || this.items[userIndex].name,
+      email: data.email || this.items[userIndex].email,
+      password: data.password || this.items[userIndex].password,
+
+      updatedAt: new Date(),
+    })
+
+    return user
+  }
+
+  async delete(id: string): Promise<void> {
+    const userIndex = this.items.findIndex((item) => item.id === id)
+
+    this.items.splice(userIndex, 1)
   }
 }
