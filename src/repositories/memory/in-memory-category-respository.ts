@@ -43,7 +43,10 @@ export class InMemoryCategoryRepository implements CategoryRepository {
       throw new AppError('Product Not Found')
     }
 
-    const item = (this.items[itemIndex] = { ...this.items[itemIndex], ...data })
+    const item = (this.items[itemIndex] = {
+      ...this.items[itemIndex],
+      name: data.name ? data.name : this.items[itemIndex].name,
+    })
 
     return item
   }

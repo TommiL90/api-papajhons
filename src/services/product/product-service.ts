@@ -44,7 +44,7 @@ export class ProductsService {
   }
 
   remove(id: string) {
-    const deletedProduct = this.productsRepository.remove(id)
+    const deletedProduct = this.productsRepository.delete(id)
     if (!deletedProduct) {
       throw new AppError('Product not found')
     }

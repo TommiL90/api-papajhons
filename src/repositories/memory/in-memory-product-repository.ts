@@ -60,7 +60,17 @@ export class InMemoryProductRepository implements ProductsRepository {
       throw new AppError('Product Not Found')
     }
 
-    const item = (this.items[itemIndex] = { ...this.items[itemIndex], ...data })
+    const item = (this.items[itemIndex] = {
+      ...this.items[itemIndex],
+      name: data.name || this.items[itemIndex].name,
+      brand: data.brand || this.items[itemIndex].brand,
+      categoryId: data.categoryId || this.items[itemIndex].categoryId,
+      description: data.description || this.items[itemIndex].description,
+      imgUrl: data.imgUrl || this.items[itemIndex].imgUrl,
+      price: data.price || this.items[itemIndex].price,
+      sku: data.sku || this.items[itemIndex].sku,
+      stock: data.stock || this.items[itemIndex].stock,
+    })
 
     return item
   }
