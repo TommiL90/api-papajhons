@@ -9,11 +9,11 @@ export abstract class ProductsRepository {
 
   abstract findAll(): Promise<Product[]>
 
-  abstract findOneBySku(sku: number): Promise<Product>
+  abstract findOneBySku(sku: number): Promise<Product | null>
 
-  abstract findOneById(id: string): Promise<Product>
+  abstract findOneById(id: string): Promise<Product | null>
 
   abstract update(id: string, updateProductDto: UpdateProduct): Promise<Product>
 
-  abstract remove(id: string): Promise<void>
+  abstract delete(id: string): Promise<void>
 }

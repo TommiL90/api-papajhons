@@ -9,11 +9,9 @@ export abstract class CategoryRepository {
 
   abstract findAll(): Promise<Category[]>
 
-  abstract findOne(id: string): Promise<Category | undefined>
-
-  abstract findByName(name: string): Promise<Category | undefined>
+  abstract findById(id: string): Promise<Category | null>
 
   abstract update(id: string, category: UpdateCategory): Promise<Category>
 
-  abstract remove(id: string): Promise<void>
+  abstract delete(id: string): Promise<void>
 }

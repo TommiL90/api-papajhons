@@ -7,4 +7,4 @@ import { z } from 'zod'
 
 export type Product = z.infer<typeof ProductSchema>
 export type CreateProduct = z.infer<typeof CreateProductSchema>
-export type UpdateProduct = z.infer<typeof UpdateProductSchema>
+export type UpdateProduct = Omit<Product, 'createdAt' | 'updatedAt'>

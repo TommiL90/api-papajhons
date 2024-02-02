@@ -52,7 +52,7 @@ export class ProductsService {
   }
 
   private async verifyCategory(categoryId: string) {
-    const findCategory = await this.categoryService.findOne(categoryId)
+    const findCategory = await this.categoryService.findById(categoryId)
     if (!findCategory) {
       throw new AppError('Category not found')
     }
