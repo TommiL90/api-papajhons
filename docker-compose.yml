@@ -2,20 +2,20 @@ version: '3.8'
 
 services:
   postgres:
-    container_name: e-papajhons-db
+    container_name: e-commerce-db
     image: postgres
     ports:
       - 5432:5432
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: docker
-      POSTGRES_DB: nest-clean
+      POSTGRES_DB: e-commerce-db
       PGDATA: /data/postgres
     volumes:
       - ./data/pg:/data/postgres
 
   cache:
-    container_name: nest-clean-cache
+    container_name: e-commerce-cache
     image: redis
     ports:
       - 6379:6379

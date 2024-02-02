@@ -1,10 +1,10 @@
 {
-  "name": "api-GymPass",
+  "name": "e-commerce-express",
   "version": "0.0.1",
   "description": "Simples APIRest for training express, typescript and prisma",
   "main": "dist/index.js",
   "scripts": {
-    "dev": "tsx watch src/server.ts --cls --rs",
+    "dev": "tsx watch src/server.ts",
     "start": "node build/server.js",
     "test:create-prisma-environment": "npm link ./prisma/vitest-environment-prisma",
     "test:install-prisma-environment": "npm link vitest-environment-prisma",
@@ -51,6 +51,7 @@
     "@prisma/client": "^5.9.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
+    "dayjs": "1.11.10",
     "dotenv": "^16.0.3",
     "express": "^4.18.2",
     "express-async-errors": "^3.1.1",

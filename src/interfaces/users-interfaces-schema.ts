@@ -1,14 +1,14 @@
-import { z } from 'zod'
 import {
-  createUserSchema,
-  loginSchema,
-  resCreateUserSchema,
-  userSchema,
-  usersListSchema,
-} from '../schemas/users-schema'
+  AuthSchema,
+  CreateUserSchema,
+  ResCreateUserSchema,
+  UserSchema,
+  UsersListSchema,
+} from '@/schemas/user-schema'
+import { z } from 'zod'
 
-export type TUser = z.infer<typeof userSchema>
-export type TCreateUser = z.infer<typeof createUserSchema>
-export type TResCreateUser = z.infer<typeof resCreateUserSchema>
-export type TLogin = z.infer<typeof loginSchema>
-export type TUsersList = z.infer<typeof usersListSchema>
+export type User = z.infer<typeof UserSchema>
+export type CreateUser = z.infer<typeof CreateUserSchema>
+export type UserWithoutPassword = z.infer<typeof ResCreateUserSchema>
+export type AuthUser = z.infer<typeof AuthSchema>
+export type UsersList = z.infer<typeof UsersListSchema>

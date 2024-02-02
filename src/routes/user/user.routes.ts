@@ -5,7 +5,7 @@ import {
   createUserSchema,
   loginSchema,
   updateUserSchema,
-} from '../../schemas/users-schema'
+} from '../../schemas/user-schema'
 import userMiddlewares from '../../middlewares/user.middlewares'
 
 const userRouter: Router = Router()

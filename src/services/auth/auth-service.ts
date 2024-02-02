@@ -1,7 +1,7 @@
 import { env } from '@/env'
 import { AppError } from '@/errors/AppError'
-import { TLogin } from '@/interfaces/users-interfaces-schema'
-import { UsersRepository } from '@/repositories/users-repository'
+import { AuthUser } from '@/interfaces/users-interfaces-schema'
+import { UsersRepository } from '@/repositories/user-repository'
 import { compareSync } from 'bcryptjs'
 
 import { sign } from 'jsonwebtoken'
@@ -9,7 +9,7 @@ import { sign } from 'jsonwebtoken'
 export class AuthService {
   constructor(private userRepository: UsersRepository) {}
 
-  login = async (payload: TLogin): Promise<string> => {
+  login = async (payload: AuthUser): Promise<string> => {
     const user = await this.userRepository.findByEmailForAuth(payload.email)
 
     if (!user) {

@@ -1,10 +1,10 @@
 import { AppError } from '@/errors/AppError'
 import {
-  TCreateUser,
-  TResCreateUser,
+  CreateUser,
+  UserWithoutPassword,
 } from '@/interfaces/users-interfaces-schema'
-import { UsersRepository } from '@/repositories/users-repository'
-import { resCreateUserSchema } from '@/schemas/users-schema'
+import { UsersRepository } from '@/repositories/user-repository'
+import { ResCreateUserSchema } from '@/schemas/user-schema'
 import { hashSync } from 'bcryptjs'
 
 export class UserService {
@@ -14,7 +14,7 @@ export class UserService {
     return hashSync(password, 10)
   }
 
-  create = async (payload: TCreateUser): Promise<TResCreateUser> => {
+  create = async (payload: CreateUser): Promise<UserWithoutPassword> => {
     const email = await this.userRepository.findByEmail(payload.email)
 
     if (email) {
@@ -28,19 +28,19 @@ export class UserService {
       password: hashedPassword,
     })
 
-    const newUser = resCreateUserSchema.parse(data)
+    const newUser = ResCreateUserSchema.parse(data)
 
     return newUser
   }
 
-  findById = async (id: string): Promise<TResCreateUser> => {
+  findById = async (id: string): Promise<UserWithoutPassword> => {
     const user = await this.userRepository.findById(id)
 
     if (!user) {
       throw new AppError('User not found', 404)
     }
 
-    return resCreateUserSchema.parse(user)
+    return ResCreateUserSchema.parse(user)
   }
 }
 

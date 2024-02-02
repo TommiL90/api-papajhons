@@ -9,46 +9,103 @@ datasource db {
 
 enum Role {
   ADMIN
-  MEMBER
+  USER
 }
-model User {
-  id        String    @id @default(uuid())
-  name      String
-  email     String    @unique()
-  password  String
-  role      Role      @default(MEMBER)
-  createdAt DateTime  @default(now()) @map("created_at")
-  updatedAt DateTime  @default(now()) @map("updated_at")
-  deletedAt DateTime? @map("deleted_at")
 
-  checkIns CheckIn[]
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique()
+  password  String
+  role      Role     @default(USER)
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  address Address?
+
+  orders Order?
 
   @@map("users")
 }
 
-model CheckIn {
-  id           String    @id @default(uuid())
-  created_at   DateTime  @default(now())
-  validated_at DateTime?
+model Address {
+  id         String   @id @default(uuid())
+  zipCode    String
+  state      String
+  city       String
+  street     String
+  number     String
+  complement String?
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  userId     String   @unique @map("user_id")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  user    User   @relation(fields: [user_id], references: [id])
-  user_id String
-
-  gym    Gym    @relation(fields: [gym_id], references: [id])
-  gym_id String
-
-  @@map("check_ins")
+  @@index([userId])
+  @@map("addresses")
 }
 
-model Gym {
-  id          String  @id @default(uuid())
-  title       String
-  description String?
-  phone       String?
-  latitude    Decimal
-  longitude   Decimal
+enum OrdersStatus {
+  CREATED
+  RUNNING
+  DONE
+  FAILURE
+}
 
-  checkIns CheckIn[]
+model Order {
+  id         String         @id
+  status     OrdersStatus
+  paid       Boolean        @default(false)
+  createdAt  DateTime       @default(now()) @map("created_at")
+  updatedAt  DateTime       @updatedAt @map("updated_at")
+  totalPrice Float
+  userId     String         @unique @map("user_id")
+  user       User           @relation(fields: [userId], references: [id])
+  products   ProductsOrder[]
 
-  @@map("gyms")
+  @@map("orders")
+}
+
+model Product {
+  id          String          @id @default(uuid())
+  name        String          @db.VarChar(120)
+  description String          @db.Text
+  price       Float
+  stock       Int
+  categoryId  String          @map("category_id")
+  imgUrl      String?         @db.Text
+  createdAt   DateTime        @default(now()) @map("created_at")
+  updatedAt   DateTime        @updatedAt @map("updated_at")
+  brand       String         @db.VarChar(120)
+  category    Category        @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  orders      ProductsOrder[]
+
+  @@index([categoryId])
+  @@map("products")
+}
+
+model Category {
+  id        String    @id @default(uuid())
+  name      String    @db.VarChar(120)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  products  Product[]
+
+  @@map("categories")
+}
+
+model ProductsOrder {
+  id        String   @id @default(uuid())
+  productId String   @map("product_id")
+  orderId   String   @map("order_id")
+  price     Float
+  quantity  Int
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@index([orderId])
+  @@map("products_order")
 }

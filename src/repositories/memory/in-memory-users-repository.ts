@@ -1,29 +1,28 @@
 import {
-  TCreateUser,
-  TResCreateUser,
-  TUser,
+  CreateUser,
+  User,
+  UserWithoutPassword,
 } from '@/interfaces/users-interfaces-schema'
-import { UsersRepository } from '../users-repository'
+import { UsersRepository } from '../user-repository'
 import { Role } from '@prisma/client'
 import { randomUUID } from 'node:crypto'
 
 export class InMemoryUsersRepository implements UsersRepository {
-  public items: TUser[] = []
+  public items: User[] = []
 
-  create(data: TCreateUser): Promise<TResCreateUser> {
+  create(data: CreateUser) {
     const newUser = {
       id: randomUUID().toString(),
       name: data.name,
       email: data.email,
       password: data.password,
-      role: Role.MEMBER,
+      role: Role.USER,
       createdAt: new Date(),
       updatedAt: new Date(),
-      deletedAt: null,
     }
 
     this.items.push(newUser)
-    return Promise.resolve(newUser) as Promise<TResCreateUser>
+    return Promise.resolve(newUser) as Promise<UserWithoutPassword>
   }
 
   async findByEmail(email: string) {
@@ -36,7 +35,7 @@ export class InMemoryUsersRepository implements UsersRepository {
     return user
   }
 
-  async findByEmailForAuth(email: string): Promise<TUser | null> {
+  async findByEmailForAuth(email: string): Promise<User | null> {
     const user = this.items.find((item) => item.email === email)
 
     if (!user) {

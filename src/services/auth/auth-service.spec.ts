@@ -2,7 +2,7 @@ import { expect, describe, it, beforeEach } from 'vitest'
 import { InMemoryUsersRepository } from '@/repositories/memory/in-memory-users-repository'
 import { UserService } from '@/services/user/users-service'
 import { AuthService } from './auth-service'
-import { TCreateUser } from '@/interfaces/users-interfaces-schema'
+import { CreateUser } from '@/interfaces/users-interfaces-schema'
 
 let userRepository: InMemoryUsersRepository
 let userService: UserService
@@ -14,7 +14,7 @@ describe('Auth service', () => {
     authService = new AuthService(userRepository)
   })
   it('should be able to authenticate a user', async () => {
-    const createUser: TCreateUser = {
+    const createUser: CreateUser = {
       name: 'John Doe',
       email: 'test@gmail.com',
       password: 'hashedPassword',
