@@ -4,12 +4,12 @@ import {
 } from '@/interfaces/users-interfaces-schema'
 import { User } from '@prisma/client'
 
-export interface UsersRepository {
-  create(data: CreateUser): Promise<UserWithoutPassword>
+export abstract class UsersRepository {
+  abstract create(data: CreateUser): Promise<UserWithoutPassword>
 
-  findByEmail(email: string): Promise<UserWithoutPassword | null>
+  abstract findByEmail(email: string): Promise<UserWithoutPassword | null>
 
-  findByEmailForAuth(email: string): Promise<User | null>
+  abstract findByEmailForAuth(email: string): Promise<User | null>
 
-  findById(id: string): Promise<UserWithoutPassword | null>
+  abstract findById(id: string): Promise<UserWithoutPassword | null>
 }
