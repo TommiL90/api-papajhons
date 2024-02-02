@@ -18,13 +18,19 @@ export class CategoryService {
     return await this.categoryRepository.findAll()
   }
 
-  async findOne(id: string) {
+  async findById(id: string) {
     const retrieveCategory = await this.categoryRepository.findById(id)
+
+    if (!retrieveCategory) {
+      throw new AppError('Category not Found', 400)
+    }
 
     return retrieveCategory
   }
 
   async update(id: string, updateCategory: UpdateCategory) {
+    await this.findById(id)
+
     const updatedCategory = await this.categoryRepository.update(
       id,
       updateCategory,
@@ -33,11 +39,8 @@ export class CategoryService {
     return updatedCategory
   }
 
-  async remove(id: string) {
-    const deleteCategory = await this.categoryRepository.findById(id)
-    if (!deleteCategory) {
-      throw new AppError('Category not found')
-    }
+  async delete(id: string) {
+    await this.findById(id)
     await this.categoryRepository.delete(id)
   }
 }
