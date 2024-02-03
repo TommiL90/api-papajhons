@@ -1,7 +1,6 @@
 import prisma from '@/lib/prisma'
-import { Prisma } from '@prisma/client'
+import { $Enums, Prisma } from '@prisma/client'
 import { UsersRepository } from '../user-repository'
-import { TUser } from '@/interfaces/users-interfaces-schema'
 
 export class PrismaUserRepository implements UsersRepository {
   async create(data: Prisma.UserCreateInput) {
@@ -34,5 +33,42 @@ export class PrismaUserRepository implements UsersRepository {
     })
 
     return user
+  }
+
+  findAll(): Promise<
+    {
+      id: string
+      name: string
+      email: string
+      password: string
+      role: $Enums.Role
+      createdAt: Date
+      updatedAt: Date
+    }[]
+  > {
+    throw new Error('Method not implemented.')
+  }
+
+  update(
+    id: string,
+    data: {
+      name?: string | undefined
+      email?: string | undefined
+      password?: string | undefined
+    },
+  ): Promise<{
+    id: string
+    name: string
+    email: string
+    password: string
+    role: $Enums.Role
+    createdAt: Date
+    updatedAt: Date
+  }> {
+    throw new Error('Method not implemented.')
+  }
+
+  delete(id: string): Promise<void> {
+    throw new Error('Method not implemented.')
   }
 }

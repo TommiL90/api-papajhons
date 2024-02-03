@@ -6,5 +6,5 @@ export const makeAuthUserService = () => {
 
   const authService = new AuthService(userRepository)
 
-  return authService.login
+  return authService.createToken
 }

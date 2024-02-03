@@ -1,11 +1,6 @@
-import { test, expect, describe, it, beforeEach } from 'vitest'
-
+import { expect, describe, it, beforeEach } from 'vitest'
 import { InMemoryCategoryRepository } from '@/repositories/memory/in-memory-category-respository'
-import {
-  Category,
-  CreateCategory,
-  UpdateCategory,
-} from '@/interfaces/category-interfaces'
+import { Category, UpdateCategory } from '@/interfaces/category-interfaces'
 import { AppError } from '@/errors/AppError'
 import { InMemoryProductRepository } from '@/repositories/memory/in-memory-product-repository'
 import { ProductsService } from './product-service'

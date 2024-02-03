@@ -1,43 +1,40 @@
 import { Router } from 'express'
-import userControllers from '../../controllers/user/user.controllers'
-import middlewares from '../../middlewares'
-import {
-  createUserSchema,
-  loginSchema,
-  updateUserSchema,
-} from '../../schemas/user-schema'
-import userMiddlewares from '../../middlewares/user.middlewares'
+
+import { UserController } from '@/controllers/user/user.controllers'
+import { AuthSchema, CreateUserSchema } from '@/schemas/user-schema'
+import { BodyValidationMiddleware } from '@/middlewares/body-validation-middleware'
 
 const userRouter: Router = Router()
+const userController = new UserController()
 
 userRouter.post(
   '/register',
-  middlewares.validateBodyMiddleware(createUserSchema),
-  userControllers.createUser,
+  BodyValidationMiddleware.execute(CreateUserSchema),
+  userController.createUser,
 )
 userRouter.post(
   '/login',
-  middlewares.validateBodyMiddleware(loginSchema),
-  userControllers.loginUser,
+  BodyValidationMiddleware.execute(AuthSchema),
+  userController.authUser,
 )
-userRouter.patch(
-  '/:id',
-  userMiddlewares.validateTokenMiddleware,
-  userMiddlewares.verifyOwnerMiddleware,
-  middlewares.validateBodyMiddleware(updateUserSchema),
-  userControllers.updateUser,
-)
-userRouter.delete(
-  '/:id',
-  userMiddlewares.validateTokenMiddleware,
-  userMiddlewares.verifyOwnerMiddleware,
-  userControllers.deleteUser,
-)
-userRouter.get('', userControllers.listUsers)
-userRouter.get(
-  '/user',
-  userMiddlewares.validateTokenMiddleware,
-  userControllers.rerieveUser,
-)
+// userRouter.patch(
+//   '/:id',
+//   userMiddlewares.validateTokenMiddleware,
+//   userMiddlewares.verifyOwnerMiddleware,
+//   middlewares.validateBodyMiddleware(updateUserSchema),
+//   userControllers.updateUser,
+// )
+// userRouter.delete(
+//   '/:id',
+//   userMiddlewares.validateTokenMiddleware,
+//   userMiddlewares.verifyOwnerMiddleware,
+//   userControllers.deleteUser,
+// )
+// userRouter.get('', userControllers.listUsers)
+// userRouter.get(
+//   '/user',
+//   userMiddlewares.validateTokenMiddleware,
+//   userControllers.rerieveUser,
+// )
 
 export default userRouter

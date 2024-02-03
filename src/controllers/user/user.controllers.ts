@@ -1,27 +1,29 @@
 import { Request, Response } from 'express'
-import {
-  TCreateUser,
-  TResCreateUser,
-} from '@/interfaces/users-interfaces-schema'
 import { makeCreateUser } from '@/services/factories/make-create-user'
 import { makeAuthUserService } from '@/services/factories/make-auth-service'
+import {
+  CreateUser,
+  UserWithoutPassword,
+} from '@/interfaces/users-interfaces-schema'
 
-const createUser = async (req: Request, res: Response) => {
-  const data: TCreateUser = req.body
+export class UserController {
+  createUser = async (req: Request, res: Response) => {
+    const data: CreateUser = req.body
 
-  const createUserService = makeCreateUser()
+    const createUserService = makeCreateUser()
 
-  const newUser: TResCreateUser = await createUserService(data)
+    const newUser: UserWithoutPassword = await createUserService(data)
 
-  return res.status(201).json(newUser)
-}
+    return res.status(201).json(newUser)
+  }
 
-const authUser = async (req: Request, res: Response) => {
-  const authService = makeAuthUserService()
+  authUser = async (req: Request, res: Response) => {
+    const authService = makeAuthUserService()
 
-  const token: string = await authService(req.body)
+    const token: string = await authService(req.body)
 
-  return res.status(200).json({ token })
+    return res.status(200).json({ token })
+  }
 }
 
 // const listUsers = async (req: Request, res: Response) => {
