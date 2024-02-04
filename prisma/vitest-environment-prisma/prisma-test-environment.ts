@@ -7,7 +7,7 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
-const generateDatabaseURL = (schema: string) => {
+function generateDatabaseURL(schema: string) {
   if (!process.env.DATABASE_URL) {
     throw new Error('Please provide a DATABASE_URL environment variable.')
   }
@@ -22,13 +22,21 @@ const generateDatabaseURL = (schema: string) => {
 export default <Environment>{
   name: 'prisma',
   async setup() {
-    console.log('Setting up test database...✅')
+    const schema = randomUUID()
+    const databaseURL = generateDatabaseURL(schema)
+
+    process.env.DATABASE_URL = databaseURL
+
+    execSync('npx prisma migrate deploy')
+
     return {
-      teardown() {
-        console.log('Tearing down test database...✅')
+      async teardown() {
+        await prisma.$executeRawUnsafe(
+          `DROP SCHEMA IF EXISTS "${schema}" CASCADE`,
+        )
+
+        await prisma.$disconnect()
       },
     }
   },
-  // Puedes agregar más propiedades según sea necesario
-  transformMode: 'ssr',
 }

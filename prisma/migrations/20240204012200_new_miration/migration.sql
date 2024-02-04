@@ -2,7 +2,7 @@
 CREATE TYPE "Role" AS ENUM ('ADMIN', 'USER');
 
 -- CreateEnum
-CREATE TYPE "OrdersStatus" AS ENUM ('CREATED', 'RUNNIG', 'DONE', 'FAILURE');
+CREATE TYPE "OrdersStatus" AS ENUM ('CREATED', 'RUNNING', 'DONE', 'FAILURE');
 
 -- CreateTable
 CREATE TABLE "users" (
@@ -53,6 +53,7 @@ CREATE TABLE "products" (
     "description" TEXT NOT NULL,
     "price" DOUBLE PRECISION NOT NULL,
     "stock" INTEGER NOT NULL,
+    "sku" INTEGER NOT NULL,
     "category_id" TEXT NOT NULL,
     "imgUrl" TEXT,
     "created_at" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -96,6 +97,9 @@ CREATE INDEX "addresses_user_id_idx" ON "addresses"("user_id");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "orders_user_id_key" ON "orders"("user_id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "products_sku_key" ON "products"("sku");
 
 -- CreateIndex
 CREATE INDEX "products_category_id_idx" ON "products"("category_id");

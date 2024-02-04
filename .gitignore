@@ -7,3 +7,4 @@ dev.db
 prisma/dev.db
 data
 coverage
+.DS_Store
