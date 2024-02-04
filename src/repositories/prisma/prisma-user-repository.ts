@@ -1,5 +1,5 @@
 import prisma from '@/lib/prisma'
-import { $Enums, Prisma } from '@prisma/client'
+import { Prisma } from '@prisma/client'
 import { UsersRepository } from '../user-repository'
 
 export class PrismaUserRepository implements UsersRepository {
@@ -15,7 +15,7 @@ export class PrismaUserRepository implements UsersRepository {
     const user = await prisma.user.findUnique({
       where: { email },
     })
-
+    console.log(user)
     return user
   }
 
@@ -41,7 +41,7 @@ export class PrismaUserRepository implements UsersRepository {
       name: string
       email: string
       password: string
-      role: $Enums.Role
+      role: 'ADMIN'
       createdAt: Date
       updatedAt: Date
     }[]
@@ -61,7 +61,7 @@ export class PrismaUserRepository implements UsersRepository {
     name: string
     email: string
     password: string
-    role: $Enums.Role
+    role: 'ADMIN'
     createdAt: Date
     updatedAt: Date
   }> {

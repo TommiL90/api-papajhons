@@ -13,7 +13,7 @@ userRouter.post(
   userController.createUser,
 )
 userRouter.post(
-  '/login',
+  '/session',
   BodyValidationMiddleware.execute(AuthSchema),
   userController.authUser,
 )

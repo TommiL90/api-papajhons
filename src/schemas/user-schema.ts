@@ -4,7 +4,7 @@ import { Role } from '@prisma/client'
 export const RoleSchema = z.enum([Role.ADMIN, Role.USER]).default(Role.USER)
 export const UserSchema = z.object({
   id: z.string().uuid(),
-  name: z.string().max(50),
+  name: z.string().min(3, 'Requerided min 3 characters').max(50),
   email: z.string().email().max(100),
   password: z.string().max(120),
   role: RoleSchema,
@@ -22,7 +22,6 @@ export const CreateUserSchema = UserSchema.omit({
   id: true,
   createdAt: true,
   updatedAt: true,
-  contacts: true,
   role: true,
 })
 

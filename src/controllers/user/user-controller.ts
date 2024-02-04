@@ -19,7 +19,7 @@ export class UserController {
 
   authUser = async (req: Request, res: Response) => {
     const authService = makeAuthUserService()
-
+    console.log(req.body)
     const token: string = await authService(req.body)
 
     return res.status(200).json({ token })
