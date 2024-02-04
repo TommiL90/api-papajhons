@@ -16,9 +16,11 @@ describe('Auth service', () => {
   })
   it('should be able to authenticate a user', async () => {
     const createUser: CreateUser = {
-      name: 'John Doe',
-      email: 'test@gmail.com',
-      password: 'hashedPassword',
+      username: 'test',
+      firstName: 'firstName',
+      lastName: 'lastName',
+      email: 'test@mail.com',
+      password: '123456',
     }
 
     await userService.create(createUser)
@@ -33,9 +35,11 @@ describe('Auth service', () => {
 
   it('should be able to decode a token', async () => {
     const createUser: CreateUser = {
-      name: 'John Doe',
-      email: 'test@gmail.com',
-      password: 'hashedPassword',
+      username: 'John Doe',
+      firstName: 'firstName',
+      lastName: 'lastName',
+      email: 'test@mail.com',
+      password: '123456',
     }
 
     await userService.create(createUser)
@@ -49,7 +53,7 @@ describe('Auth service', () => {
     const decoded = await AuthService.validateToken(bearerToken)
 
     expect(decoded).toEqual({
-      userName: 'John Doe',
+      username: 'John Doe',
       role: 'USER',
       iat: expect.any(Number),
       exp: expect.any(Number),

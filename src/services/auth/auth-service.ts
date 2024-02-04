@@ -30,7 +30,7 @@ export class AuthService {
     }
 
     const token = sign(
-      { userName: user.name, role: user.role },
+      { username: user.username, role: user.role },
       env.SECRET_KEY,
       {
         expiresIn: '1h',

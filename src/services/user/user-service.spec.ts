@@ -26,27 +26,33 @@ describe('Auth service', () => {
   })
   it('should be able to register a user', async () => {
     const user = await userService.create({
-      name: 'test',
+      username: 'test',
+      firstName: 'firstName',
+      lastName: 'lastName',
       email: 'test@mail.com',
       password: '123456',
     })
 
     expect(user.id).toEqual(expect.any(String))
     expect(user).toBeDefined()
-    expect(user.name).toBe('test')
+    expect(user.username).toBe('test')
     expect(user.email).toBe('test@mail.com')
   })
 
   it('should not be able to register with same email twice', async () => {
     await userService.create({
-      name: 'test',
+      username: 'test',
+      firstName: 'firstName',
+      lastName: 'lastName',
       email: 'test@mail.com',
       password: '123456',
     })
 
     try {
       await userService.create({
-        name: 'test',
+        username: 'test',
+        firstName: 'firstName',
+        lastName: 'lastName',
         email: 'test@mail.com',
         password: '123456',
       })
@@ -57,14 +63,16 @@ describe('Auth service', () => {
 
   it('should be able to get a user profile', async () => {
     const user = await userService.create({
-      name: 'test',
+      username: 'test',
+      firstName: 'firstName',
+      lastName: 'lastName',
       email: 'test@mail.com',
       password: '123456',
     })
 
     const profile = await userService.findById(user.id)
 
-    expect(profile.name).toEqual('test')
+    expect(profile.username).toEqual('test')
   })
 
   it('should not be able to get a user profile with invalid id', async () => {
@@ -84,7 +92,9 @@ describe('Auth service', () => {
 
   it('should be able return a user by ID', async () => {
     const createdUser = await userService.create({
-      name: 'test',
+      username: 'test',
+      firstName: 'firstName',
+      lastName: 'lastName',
       email: 'test@mail.com',
       password: '123456',
     })
@@ -106,7 +116,9 @@ describe('Auth service', () => {
 
   it('should be able update a user', async () => {
     const createdUser = await userService.create({
-      name: 'test',
+      username: 'test',
+      firstName: 'firstName',
+      lastName: 'lastName',
       email: 'test@mail.com',
       password: '123456',
     })
@@ -114,27 +126,29 @@ describe('Auth service', () => {
     const userId = createdUser.id
     const updateUser: UpdateUser = {
       ...createdUser,
-      name: 'new name',
+      username: 'new name',
     }
 
     const res = await userService.update(userId, updateUser)
 
     expect(res.id).toEqual(userId)
-    expect(res.name).toEqual('new name')
+    expect(res.username).toEqual('new name')
   })
 
   it('should not be able update a inexistent user', async () => {
     const categoryId = 'invalidId'
 
     try {
-      await userService.update(categoryId, { name: 'Test 2' })
+      await userService.update(categoryId, { username: 'Test 2' })
     } catch (error) {
       expect(error).toBeInstanceOf(AppError)
     }
   })
   it('should be able delete a user', async () => {
     const res: UserWithoutPassword = await userService.create({
-      name: 'test',
+      username: 'test',
+      firstName: 'firstName',
+      lastName: 'lastName',
       email: 'test@mail.com',
       password: '123456',
     })

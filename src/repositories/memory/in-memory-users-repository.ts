@@ -14,8 +14,10 @@ export class InMemoryUsersRepository implements UsersRepository {
   async create(data: CreateUser) {
     const newUser = {
       id: randomUUID().toString(),
-      name: data.name,
+      username: data.username,
       email: data.email,
+      firstName: data.firstName,
+      lastName: data.lastName,
       password: data.password,
       role: Role.USER,
       createdAt: new Date(),
@@ -66,7 +68,7 @@ export class InMemoryUsersRepository implements UsersRepository {
     const user = (this.items[userIndex] = {
       ...this.items[userIndex],
 
-      name: data.name || this.items[userIndex].name,
+      username: data.username || this.items[userIndex].username,
       email: data.email || this.items[userIndex].email,
       password: data.password || this.items[userIndex].password,
 
