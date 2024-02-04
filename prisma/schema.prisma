@@ -21,29 +21,27 @@ model User {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
-  address Address?
-
-  orders Order?
+  orders PurchaseOrders?
 
   @@map("users")
 }
 
-model Address {
-  id         String   @id @default(uuid())
-  zipCode    String
-  state      String
-  city       String
-  street     String
-  number     String
-  complement String?
-  createdAt  DateTime @default(now()) @map("created_at")
-  updatedAt  DateTime @updatedAt @map("updated_at")
-  userId     String   @unique @map("user_id")
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+// model Address {
+//   id         String   @id @default(uuid())
+//   zipCode    String
+//   state      String
+//   city       String
+//   street     String
+//   number     String
+//   complement String?
+//   createdAt  DateTime @default(now()) @map("created_at")
+//   updatedAt  DateTime @updatedAt @map("updated_at")
+//   userId     String   @unique @map("user_id")
+//   user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([userId])
-  @@map("addresses")
-}
+//   @@index([userId])
+//   @@map("addresses")
+// }
 
 enum OrdersStatus {
   CREATED
@@ -52,34 +50,34 @@ enum OrdersStatus {
   FAILURE
 }
 
-model Order {
-  id         String          @id
-  status     OrdersStatus
-  paid       Boolean         @default(false)
-  createdAt  DateTime        @default(now()) @map("created_at")
-  updatedAt  DateTime        @updatedAt @map("updated_at")
-  totalPrice Float
-  userId     String          @unique @map("user_id")
-  user       User            @relation(fields: [userId], references: [id])
-  products   ProductsOrder[]
+model PurchaseOrders {
+  id                 String               @id
+  status             OrdersStatus
+  paid               Boolean              @default(false)
+  createdAt          DateTime             @default(now()) @map("created_at")
+  updatedAt          DateTime             @updatedAt @map("updated_at")
+  totalPrice         Float
+  userId             String               @unique @map("user_id")
+  user               User                 @relation(fields: [userId], references: [id])
+  purchaseOrderItems PurchaseOrderItems[]
 
-  @@map("orders")
+  @@map("purchase_orders")
 }
 
 model Product {
-  id          String          @id @default(uuid())
-  name        String          @db.VarChar(120)
-  description String          @db.Text
-  price       Float
-  stock       Int
-  sku         Int             @unique
-  categoryId  String          @map("category_id")
-  imgUrl      String?         @db.Text
-  createdAt   DateTime        @default(now()) @map("created_at")
-  updatedAt   DateTime        @updatedAt @map("updated_at")
-  brand       String          @db.VarChar(120)
-  category    Category        @relation(fields: [categoryId], references: [id], onDelete: Restrict)
-  orders      ProductsOrder[]
+  id                 String               @id @default(uuid())
+  name               String               @db.VarChar(120)
+  description        String               @db.Text
+  price              Float
+  stock              Int
+  sku                Int                  @unique
+  categoryId         String               @map("category_id")
+  imgUrl             String?              @db.Text
+  createdAt          DateTime             @default(now()) @map("created_at")
+  updatedAt          DateTime             @updatedAt @map("updated_at")
+  brand              String               @db.VarChar(120)
+  category           Category             @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  purchaseOrderItems PurchaseOrderItems[]
 
   @@index([categoryId])
   @@map("products")
@@ -95,18 +93,18 @@ model Category {
   @@map("categories")
 }
 
-model ProductsOrder {
-  id        String   @id @default(uuid())
-  productId String   @map("product_id")
-  orderId   String   @map("order_id")
-  price     Float
-  quantity  Int
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-  product   Product  @relation(fields: [productId], references: [id], onDelete: Restrict)
-  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+model PurchaseOrderItems {
+  id              String         @id @default(uuid())
+  productId       String         @map("product_id")
+  purchaseOrderId String         @map("purchase_order_id")
+  price           Float
+  quantity        Int
+  createdAt       DateTime       @default(now()) @map("created_at")
+  updatedAt       DateTime       @updatedAt @map("updated_at")
+  product         Product        @relation(fields: [productId], references: [id], onDelete: Restrict)
+  order           PurchaseOrders @relation(fields: [purchaseOrderId], references: [id], onDelete: Cascade)
 
   @@index([productId])
-  @@index([orderId])
-  @@map("products_order")
+  @@index([purchaseOrderId])
+  @@map("purchase_order_items")
 }
