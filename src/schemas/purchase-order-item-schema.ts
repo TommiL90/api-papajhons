@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-export const ProductsOrderSchema = z.object({
+export const PurchaseOrderItemSchema = z.object({
   id: z.string(),
   productId: z.string(),
   orderId: z.string(),
@@ -14,4 +14,10 @@ export const ProductsOrderSchema = z.object({
     .string()
     .or(z.date())
     .transform((val) => new Date(val)),
+})
+
+export const CreatePurchaseOrderItemSchema = PurchaseOrderItemSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
 })

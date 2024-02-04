@@ -10,7 +10,7 @@ export const OrdersStatusSchema = z
   ])
   .default(OrdersStatus.CREATED)
 
-export const OrderSchema = z.object({
+export const PurchaseOrdersSchema = z.object({
   id: z.string(),
   status: OrdersStatusSchema,
   paid: z.boolean(),
@@ -25,4 +25,10 @@ export const OrderSchema = z.object({
 
   totalPrice: z.number(),
   userId: z.string(),
+})
+
+export const PurchaseOrdersCreateSchema = PurchaseOrdersSchema.omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
 })
