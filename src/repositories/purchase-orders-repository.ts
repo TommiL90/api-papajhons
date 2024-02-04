@@ -5,10 +5,7 @@ import {
 } from '@/interfaces/purchase-order-interfaces'
 
 export abstract class PurchaseOrdersRepository {
-  abstract create(
-    order: CreatePurchaseOrders,
-    userId: string,
-  ): Promise<PurchaseOrders>
+  abstract create(order: CreatePurchaseOrders): Promise<PurchaseOrders>
 
   abstract findAll(): Promise<PurchaseOrders[]>
 

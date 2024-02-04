@@ -6,7 +6,7 @@ import { ProductsRepository } from '@/repositories/product-repository'
 export class ProductsService {
   constructor(
     private productsRepository: ProductsRepository,
-    private categoryService: CategoryRepository,
+    private categoryRepository: CategoryRepository,
   ) {}
 
   async create(createProduct: CreateProduct) {
@@ -51,7 +51,7 @@ export class ProductsService {
   }
 
   private async verifyCategory(categoryId: string) {
-    const findCategory = await this.categoryService.findById(categoryId)
+    const findCategory = await this.categoryRepository.findById(categoryId)
     if (!findCategory) {
       throw new AppError('Category not found')
     }

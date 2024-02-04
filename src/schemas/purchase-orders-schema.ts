@@ -22,8 +22,6 @@ export const PurchaseOrdersSchema = z.object({
     .string()
     .or(z.date())
     .transform((val) => new Date(val)),
-
-  totalPrice: z.number(),
   userId: z.string(),
 })
 
