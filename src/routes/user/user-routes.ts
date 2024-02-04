@@ -1,6 +1,6 @@
 import { Router } from 'express'
 
-import { UserController } from '@/controllers/user/user.controllers'
+import { UserController } from '@/controllers/user/user-controller'
 import { AuthSchema, CreateUserSchema } from '@/schemas/user-schema'
 import { BodyValidationMiddleware } from '@/middlewares/body-validation-middleware'
 

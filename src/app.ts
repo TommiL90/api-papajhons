@@ -2,7 +2,7 @@ import 'reflect-metadata'
 import 'express-async-errors'
 import express from 'express'
 import cors from 'cors'
-import userRouter from './routes/user/user.routes'
+import userRouter from './routes/user/user-routes'
 import { errorHandler } from './errors/AppError'
 import contactRouter from './routes/contact/contact.routes'
 
