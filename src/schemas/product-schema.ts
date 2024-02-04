@@ -1,10 +1,13 @@
+import { Prisma } from '@prisma/client'
 import { z } from 'zod'
 
 export const ProductSchema = z.object({
   id: z.string(),
-  name: z.string(),
+  title: z.string().max(30),
   description: z.string(),
-  price: z.number(),
+  price: z
+    .instanceof(Prisma.Decimal)
+    .refine((price) => price.gte('0.01') && price.lt('9999999999.99')),
   stock: z.number(),
   sku: z.number(),
   categoryId: z.string(),

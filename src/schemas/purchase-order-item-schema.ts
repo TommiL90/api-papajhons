@@ -1,10 +1,13 @@
+import { Prisma } from '@prisma/client'
 import { z } from 'zod'
 
 export const PurchaseOrderItemSchema = z.object({
-  id: z.string(),
-  productId: z.string(),
-  orderId: z.string(),
-  price: z.number(),
+  id: z.string().uuid(),
+  productId: z.string().uuid(),
+  orderId: z.string().uuid(),
+  price: z
+    .instanceof(Prisma.Decimal)
+    .refine((price) => price.gte('0.01') && price.lt('9999999999.99')),
   quantity: z.number(),
   createdAt: z
     .string()

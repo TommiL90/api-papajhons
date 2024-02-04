@@ -14,9 +14,11 @@ enum Role {
 
 model User {
   id        String   @id @default(uuid())
-  name      String
+  username  String   @unique() @db.VarChar(50)
+  firstName String   @map("first_name") @db.VarChar(50)
+  lastName  String   @map("last_name") @db.VarChar(50)
   email     String   @unique()
-  password  String
+  password  String   @db.VarChar(50)
   role      Role     @default(USER)
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -51,7 +53,7 @@ enum OrdersStatus {
 }
 
 model PurchaseOrders {
-  id                 String               @id
+  id                 String               @id @default(uuid())
   status             OrdersStatus
   paid               Boolean              @default(false)
   createdAt          DateTime             @default(now()) @map("created_at")
@@ -65,16 +67,16 @@ model PurchaseOrders {
 
 model Product {
   id                 String               @id @default(uuid())
-  name               String               @db.VarChar(120)
+  title              String               @db.VarChar(30)
   description        String               @db.Text
-  price              Float
+  price              Decimal              @db.Decimal(11, 2)
   stock              Int
   sku                Int                  @unique
+  brand              String               @db.VarChar(120)
   categoryId         String               @map("category_id")
   imgUrl             String?              @db.Text
   createdAt          DateTime             @default(now()) @map("created_at")
   updatedAt          DateTime             @updatedAt @map("updated_at")
-  brand              String               @db.VarChar(120)
   category           Category             @relation(fields: [categoryId], references: [id], onDelete: Restrict)
   purchaseOrderItems PurchaseOrderItems[]
 
@@ -84,7 +86,7 @@ model Product {
 
 model Category {
   id        String    @id @default(uuid())
-  name      String    @db.VarChar(120)
+  name      String    @unique @db.VarChar(50)
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   products  Product[]
@@ -96,7 +98,7 @@ model PurchaseOrderItems {
   id              String         @id @default(uuid())
   productId       String         @map("product_id")
   purchaseOrderId String         @map("purchase_order_id")
-  price           Float
+  price           Decimal        @db.Decimal(15, 2)
   quantity        Int
   createdAt       DateTime       @default(now()) @map("created_at")
   updatedAt       DateTime       @updatedAt @map("updated_at")
