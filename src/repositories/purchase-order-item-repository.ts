@@ -7,8 +7,4 @@ export abstract class PurchaseOrderItemRepository {
   abstract create(
     purchaseOrderItem: CreatePurchaseOrderItem,
   ): Promise<PurchaseOrderItem>
-
-  abstract findAll(): Promise<PurchaseOrderItem[] | []>
-
-  abstract findOne(id: string): Promise<PurchaseOrderItem>
 }

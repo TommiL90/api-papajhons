@@ -8,4 +8,4 @@ export type PurchaseOrders = z.infer<typeof PurchaseOrdersSchema>
 
 export type CreatePurchaseOrders = z.infer<typeof PurchaseOrdersCreateSchema>
 
-export type UpdatePurchaseOrder = Partial<CreatePurchaseOrders>
+export type UpdatePurchaseOrder = Omit<Partial<CreatePurchaseOrders>, 'userId'>

@@ -4,7 +4,7 @@ import { z } from 'zod'
 export const PurchaseOrderItemSchema = z.object({
   id: z.string().uuid(),
   productId: z.string().uuid(),
-  orderId: z.string().uuid(),
+  purchaseOrderId: z.string().uuid(),
   price: z
     .instanceof(Prisma.Decimal)
     .refine((price) => price.gte('0.01') && price.lt('9999999999.99')),
