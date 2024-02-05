@@ -1,31 +1,32 @@
+import { CreateCategory } from '@/interfaces/category-interfaces'
 import { CategoryRepository } from '../category-repository'
+import prisma from '@/lib/prisma'
 
 export class PrismaCategoryRepository implements CategoryRepository {
-  create(category: {
-    name: string
-  }): Promise<{ id: string; createdAt: Date; updatedAt: Date; name: string }> {
-    throw new Error('Method not implemented.')
+  async create(data: CreateCategory) {
+    const newCategory = await prisma.category.create({
+      data,
+    })
+
+    return newCategory
   }
 
-  findAll(): Promise<
-    { id: string; createdAt: Date; updatedAt: Date; name: string }[]
-  > {
-    throw new Error('Method not implemented.')
+  async findById(id: string) {
+    const category = await prisma.category.findUnique({
+      where: { id },
+    })
+
+    return category
   }
 
-  findById(id: string): Promise<{
-    id: string
-    createdAt: Date
-    updatedAt: Date
-    name: string
-  } | null> {
-    throw new Error('Method not implemented.')
+  async findAll() {
+    return await prisma.category.findMany()
   }
 
   update(
     id: string,
     category: { name?: string | undefined },
-  ): Promise<{ id: string; createdAt: Date; updatedAt: Date; name: string }> {
+  ){
     throw new Error('Method not implemented.')
   }
 

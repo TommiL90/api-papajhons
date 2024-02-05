@@ -11,9 +11,9 @@ export abstract class ProductsRepository {
 
   abstract findAll(params: SearchProductsParams): Promise<FetchProducts>
 
-  abstract findOneBySku(sku: number): Promise<Product | null>
+  abstract findBySku(sku: number): Promise<Product | null>
 
-  abstract findOneById(id: string): Promise<Product | null>
+  abstract findById(id: string): Promise<Product | null>
 
   abstract update(id: string, updateProductDto: UpdateProduct): Promise<Product>
 

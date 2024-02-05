@@ -4,8 +4,8 @@ import {
   CreateProduct,
   FetchProducts,
   SearchProductsParams,
+  UpdateProduct,
 } from '@/interfaces/product-interfaces'
-import { Decimal } from '@prisma/client/runtime/library'
 
 export class PrismaProductsRepository implements ProductsRepository {
   async create(data: CreateProduct) {
@@ -14,6 +14,14 @@ export class PrismaProductsRepository implements ProductsRepository {
     })
 
     return product
+  }
+
+  async findBySku(sku: number) {
+    return await prisma.product.findUnique({ where: { sku } })
+  }
+
+  async findById(id: string) {
+    return await prisma.product.findUnique({ where: { id } })
   }
 
   async findAll(params: SearchProductsParams): Promise<FetchProducts> {
@@ -35,12 +43,6 @@ export class PrismaProductsRepository implements ProductsRepository {
         { brand: { contains: query, mode: 'insensitive' } },
       ]
     }
-    const result = await prisma.product.count({
-      where,
-      skip,
-      take,
-    })
-    console.log(result)
     const productsPromise = await prisma.product.findMany({
       where,
       skip,
@@ -71,67 +73,16 @@ export class PrismaProductsRepository implements ProductsRepository {
     }
   }
 
-  findOneBySku(sku: number): Promise<{
-    id: string
-    title: string
-    description: string
-    price: Decimal
-    stock: number
-    sku: number
-    categoryId: string
-    imgUrl: string | null
-    createdAt: Date
-    updatedAt: Date
-    brand: string
-  } | null> {
-    throw new Error('Method not implemented.')
+  async update(id: string, updateProduct: UpdateProduct) {
+    const updatedProduct = await prisma.product.update({
+      where: { id },
+      data: updateProduct,
+    })
+
+    return updatedProduct
   }
 
-  findOneById(id: string): Promise<{
-    id: string
-    title: string
-    description: string
-    price: Decimal
-    stock: number
-    sku: number
-    categoryId: string
-    imgUrl: string | null
-    createdAt: Date
-    updatedAt: Date
-    brand: string
-  } | null> {
-    throw new Error('Method not implemented.')
-  }
-
-  update(
-    id: string,
-    updateProductDto: {
-      title?: string | undefined
-      description?: string | undefined
-      price?: Decimal | undefined
-      stock?: number | undefined
-      sku?: number | undefined
-      categoryId?: string | undefined
-      imgUrl?: string | null | undefined
-      brand?: string | undefined
-    },
-  ): Promise<{
-    id: string
-    title: string
-    description: string
-    price: Decimal
-    stock: number
-    sku: number
-    categoryId: string
-    imgUrl: string | null
-    createdAt: Date
-    updatedAt: Date
-    brand: string
-  }> {
-    throw new Error('Method not implemented.')
-  }
-
-  delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.')
+  async delete(id: string) {
+    await prisma.product.delete({ where: { id } })
   }
 }
