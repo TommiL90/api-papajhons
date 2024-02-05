@@ -1,5 +1,5 @@
 import { AppError } from '@/errors/AppError'
-import { CreateProduct, UpdateProduct } from '@/interfaces/product-interfaces'
+import { CreateProduct, SearchProductsParams, UpdateProduct } from '@/interfaces/product-interfaces'
 import { CategoryRepository } from '@/repositories/category-repository'
 import { ProductsRepository } from '@/repositories/product-repository'
 
@@ -22,8 +22,8 @@ export class ProductsService {
     return this.productsRepository.create(createProduct)
   }
 
-  findAll() {
-    return this.productsRepository.findAll()
+  findAll(params: SearchProductsParams) {
+    return this.productsRepository.findAll(params)
   }
 
   findById(id: string) {

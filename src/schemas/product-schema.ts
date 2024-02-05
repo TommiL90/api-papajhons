@@ -32,4 +32,17 @@ export const CreateProductSchema = ProductSchema.omit({
 
 export const UpdateProductSchema = CreateProductSchema.partial()
 
-export const ProductsListSchema = ProductSchema.array()
+export const ProducstSearchParamsSchema = z.object({
+  pageNumber: z.number().optional(),
+  pageSize: z.number().optional(),
+  categoryId: z.string().uuid().optional(),
+  query: z.string().optional(),
+})
+
+export const FetchProductsSchema = {
+  nextPage: z.string().nullable(),
+  prevPage: z.string().nullable(),
+  pages: z.number(),
+  items: z.number(),
+  data: ProductSchema.array(),
+}

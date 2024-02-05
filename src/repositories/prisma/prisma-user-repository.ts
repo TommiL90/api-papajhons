@@ -1,16 +1,9 @@
 import prisma from '@/lib/prisma'
-import { Prisma } from '@prisma/client'
 import { UsersRepository } from '../user-repository'
+import { CreateUser } from '@/interfaces/users-interfaces-schema'
+import { $Enums } from '@prisma/client'
 
 export class PrismaUserRepository implements UsersRepository {
-  async create(data: Prisma.UserCreateInput) {
-    const user = await prisma.user.create({
-      data,
-    })
-
-    return user
-  }
-
   async findByEmail(email: string) {
     const user = await prisma.user.findUnique({
       where: { email },
@@ -38,10 +31,12 @@ export class PrismaUserRepository implements UsersRepository {
   findAll(): Promise<
     {
       id: string
-      name: string
+      username: string
+      firstName: string
+      lastName: string
       email: string
       password: string
-      role: 'ADMIN'
+      role: $Enums.Role
       createdAt: Date
       updatedAt: Date
     }[]
@@ -52,16 +47,20 @@ export class PrismaUserRepository implements UsersRepository {
   update(
     id: string,
     data: {
-      name?: string | undefined
+      username?: string | undefined
+      firstName?: string | undefined
+      lastName?: string | undefined
       email?: string | undefined
       password?: string | undefined
     },
   ): Promise<{
     id: string
-    name: string
+    username: string
+    firstName: string
+    lastName: string
     email: string
     password: string
-    role: 'ADMIN'
+    role: $Enums.Role
     createdAt: Date
     updatedAt: Date
   }> {
@@ -70,5 +69,13 @@ export class PrismaUserRepository implements UsersRepository {
 
   delete(id: string): Promise<void> {
     throw new Error('Method not implemented.')
+  }
+
+  async create(data: CreateUser) {
+    const user = await prisma.user.create({
+      data,
+    })
+
+    return user
   }
 }

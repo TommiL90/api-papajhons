@@ -1,13 +1,15 @@
 import {
   CreateProduct,
+  FetchProducts,
   Product,
+  SearchProductsParams,
   UpdateProduct,
 } from '@/interfaces/product-interfaces'
 
 export abstract class ProductsRepository {
   abstract create(createProductDto: CreateProduct): Promise<Product>
 
-  abstract findAll(): Promise<Product[]>
+  abstract findAll(params: SearchProductsParams): Promise<FetchProducts>
 
   abstract findOneBySku(sku: number): Promise<Product | null>
 
