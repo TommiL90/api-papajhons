@@ -39,7 +39,7 @@ const retrieveCategories = async () => {
 }
 
 const createProducts = async () => {
-  for (let i = 0; i < 30000; i++) {
+  for (let i = 0; i < 10; i++) {
     const category = await retrieveCategories()
 
     const product = await prisma.product.create({
