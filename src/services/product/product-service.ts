@@ -1,5 +1,9 @@
 import { AppError } from '@/errors/AppError'
-import { CreateProduct, SearchProductsParams, UpdateProduct } from '@/interfaces/product-interfaces'
+import {
+  CreateProduct,
+  SearchProductsParams,
+  UpdateProduct,
+} from '@/interfaces/product-interfaces'
 import { CategoryRepository } from '@/repositories/category-repository'
 import { ProductsRepository } from '@/repositories/product-repository'
 

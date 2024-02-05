@@ -4,6 +4,14 @@ import { Router } from 'express'
 const productRouter: Router = Router()
 const productController = new ProductController()
 
-productRouter.get('', productController.FindAll)
+productRouter.post('', productController.createProduct)
+
+productRouter.get('/:id', productController.findById)
+
+productRouter.get('', productController.findAll)
+
+productRouter.patch('/:id', productController.update)
+
+productRouter.delete('/:id', productController.delete)
 
 export default productRouter
