@@ -1,4 +1,7 @@
-import { CreateCategory } from '@/interfaces/category-interfaces'
+import {
+  CreateCategory,
+  UpdateCategory,
+} from '@/interfaces/category-interfaces'
 import { CategoryRepository } from '../category-repository'
 import prisma from '@/lib/prisma'
 
@@ -23,14 +26,18 @@ export class PrismaCategoryRepository implements CategoryRepository {
     return await prisma.category.findMany()
   }
 
-  update(
-    id: string,
-    category: { name?: string | undefined },
-  ){
-    throw new Error('Method not implemented.')
+  async update(id: string, updateCategory: UpdateCategory) {
+    const updatedCategory = await prisma.category.update({
+      where: { id },
+      data: updateCategory,
+    })
+
+    return updatedCategory
   }
 
-  delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.')
+  async delete(id: string): Promise<void> {
+    await prisma.category.delete({
+      where: { id },
+    })
   }
 }

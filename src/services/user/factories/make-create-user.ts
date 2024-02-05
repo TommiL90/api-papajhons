@@ -1,5 +1,5 @@
 import { PrismaUserRepository } from '@/repositories/prisma/prisma-user-repository'
-import { UserService } from '../user/users-service'
+import { UserService } from '../users-service'
 
 export const makeCreateUser = () => {
   const userRepository = new PrismaUserRepository()

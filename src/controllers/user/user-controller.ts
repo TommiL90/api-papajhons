@@ -1,6 +1,6 @@
 import { Request, Response } from 'express'
-import { makeCreateUser } from '@/services/factories/make-create-user'
-import { makeAuthUserService } from '@/services/factories/make-auth-service'
+import { makeCreateUser } from '@/services/user/factories/make-create-user'
+import { makeAuthUserService } from '@/services/user/factories/make-auth-service'
 import {
   CreateUser,
   UserWithoutPassword,
