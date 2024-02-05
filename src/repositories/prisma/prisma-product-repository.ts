@@ -22,23 +22,33 @@ export class PrismaProductsRepository implements ProductsRepository {
     const page = pageNumber || 1
     const take = pageSize || 20
     const skip = (page - 1) * take
-    const options = {
-      categoryId,
-      OR: [
-        { title: query ? { contains: query } : undefined },
-        { description: query ? { contains: query } : undefined },
-        { brand: query ? { contains: query } : undefined },
-      ],
+    const where: any = {}
+
+    if (categoryId !== undefined) {
+      where.categoryId = categoryId
     }
 
+    if (query !== undefined) {
+      where.OR = [
+        { title: { contains: query, mode: 'insensitive' } },
+        { description: { contains: query, mode: 'insensitive' } },
+        { brand: { contains: query, mode: 'insensitive' } },
+      ]
+    }
+    const result = await prisma.product.count({
+      where,
+      skip,
+      take,
+    })
+    console.log(result)
     const productsPromise = await prisma.product.findMany({
-      where: options,
+      where,
       skip,
       take,
     })
 
     const totalPromise = await prisma.product.count({
-      where: options,
+      where,
     })
 
     const [products, total] = await Promise.all([productsPromise, totalPromise])
