@@ -1,49 +1,44 @@
 {
   "name": "e-commerce-api-express",
   "version": "1.0.0",
-  "description": "e-commerce-api-express",
+  "description": "e-commerce-api-express.",
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "start": "node build/server.js",
-    "seed": "tsx prisma/seed.ts",
+    "build": "tsup src --out-dir build",
+    "test": "vitest run -c vitest.unit.config.ts",
+    "test:watch": "vitest -c vitest.unit.config.ts",
     "test:create-prisma-environment": "npm link ./prisma/vitest-environment-prisma",
     "test:install-prisma-environment": "npm link vitest-environment-prisma",
-    "build": "tsup src --out-dir build",
-    "test": "vitest run --dir src/services",
-    "test:watch": "vitest --dir src/services",
     "pretest:e2e": "run-s test:create-prisma-environment test:install-prisma-environment",
-    "test:e2e": "vitest run --dir src/routes",
-    "test:e2e:watch": "vitest --dir src/routes",
-    "test:coverage": "vitest run --coverage",
-    "test:ui": "vitest --ui"
-  },
-  "prisma": {
-    "seed": "tsx prisma/seed.ts"
+    "test:e2e": "vitest run -c vitest.e2e.config.ts",
+    "test:e2e:watch": "vitest -c vitest.e2e.config.ts",
+    "test:coverage": "vitest run --coverage"
   },
   "keywords": [],
-  "author": "",
+  "author": "Douglas Pinheiro Goulart",
   "license": "ISC",
   "devDependencies": {
     "@faker-js/faker": "8.4.0",
     "@rocketseat/eslint-config": "1.2.0",
     "@types/bcryptjs": "2.4.2",
     "@types/cors": "2.8.17",
-    "@types/express": "4.17.21",
+    "@types/express": "4.17.17",
     "@types/jsonwebtoken": "9.0.5",
-    "@types/node": "18.14.1",
+    "@types/node": "18.16.0",
     "@types/supertest": "2.0.12",
-    "@vitest/coverage-c8": "0.28.5",
+    "@vitest/coverage-c8": "0.30.1",
     "@vitest/ui": "0.28.5",
     "eslint": "8.34.0",
     "npm-run-all": "4.1.5",
     "prisma": "5.9.1",
     "supertest": "6.3.3",
-    "tsup": "6.6.3",
-    "tsx": "3.12.3",
-    "typescript": "4.9.5",
-    "vite-tsconfig-paths": "4.0.5",
-    "vitest": "0.28.5"
+    "tsup": "6.7.0",
+    "tsx": "3.12.6",
+    "typescript": "5.0.4",
+    "vite-tsconfig-paths": "4.2.0",
+    "vitest": "0.30.1"
   },
   "dependencies": {
     "@prisma/client": "5.9.1",
@@ -55,6 +50,6 @@
     "express-async-errors": "3.1.1",
     "jsonwebtoken": "9.0.2",
     "reflect-metadata": "0.2.1",
-    "zod": "3.20.6"
+    "zod": "3.22.4"
   }
 }

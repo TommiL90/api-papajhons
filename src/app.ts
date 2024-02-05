@@ -17,11 +17,11 @@ app.get('/', (req, res) => {
   return res.status(200).send({ msg: 'Hello world!' })
 })
 
-app.use('/users', userRouter)
-app.use('/products', productRouter)
-app.use('/categories', categoryRouter)
-app.use('/orders', purchaseOrders)
+// app.use('/users', userRouter)
+// app.use('/products', productRouter)
+// app.use('/categories', categoryRouter)
+// app.use('/orders', purchaseOrders)
 
-app.use(errorHandler)
+// app.use(errorHandler)
 
 export default app
