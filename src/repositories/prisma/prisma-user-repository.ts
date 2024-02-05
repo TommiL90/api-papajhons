@@ -4,6 +4,14 @@ import { CreateUser } from '@/interfaces/users-interfaces-schema'
 import { $Enums } from '@prisma/client'
 
 export class PrismaUserRepository implements UsersRepository {
+  async create(data: CreateUser) {
+    const user = await prisma.user.create({
+      data,
+    })
+
+    return user
+  }
+
   async findByEmail(email: string) {
     const user = await prisma.user.findUnique({
       where: { email },
@@ -69,13 +77,5 @@ export class PrismaUserRepository implements UsersRepository {
 
   delete(id: string): Promise<void> {
     throw new Error('Method not implemented.')
-  }
-
-  async create(data: CreateUser) {
-    const user = await prisma.user.create({
-      data,
-    })
-
-    return user
   }
 }

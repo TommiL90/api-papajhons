@@ -31,7 +31,7 @@ export class PrismaProductsRepository implements ProductsRepository {
     const take = pageSize || 20
     const skip = (page - 1) * take
     const where: any = {}
-
+    console.log('aqui')
     if (categoryId !== undefined) {
       where.categoryId = categoryId
     }
@@ -63,6 +63,7 @@ export class PrismaProductsRepository implements ProductsRepository {
       page! + 1 > pages
         ? null
         : `${url}?pageNumber=${page! + 1}&pageSize=${take}`
+    console.log(nextPage, prevPage, total, pages, products)
 
     return {
       nextPage,
