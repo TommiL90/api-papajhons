@@ -1,6 +1,6 @@
 import { expect, describe, it, beforeEach } from 'vitest'
 import { InMemoryUsersRepository } from '@/repositories/memory/in-memory-users-repository'
-import { UserService } from '@/services/user/users-service'
+import { UserService } from '@/services/users-service'
 import { AuthService } from './auth-service'
 import { CreateUser } from '@/interfaces/users-interfaces-schema'
 import { AppError } from '@/errors/AppError'
