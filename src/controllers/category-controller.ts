@@ -1,6 +1,4 @@
 import { CreateCategory } from '@/interfaces/category-interfaces'
-import { PrismaCategoryRepository } from '@/repositories/prisma/prisma-category-repository'
-import { CategoryService } from '@/services/category-service'
 import { makeCreateCategory } from '@/services/factories/make-create-category'
 import { makeDeleteCategory } from '@/services/factories/make-delete-category'
 import { makeListCategory } from '@/services/factories/make-list-categories'
@@ -11,13 +9,10 @@ import { Request, Response } from 'express'
 export class CategoryController {
   create = async (req: Request, res: Response) => {
     const data: CreateCategory = req.body
-    const repository = new PrismaCategoryRepository()
-    const categoryService = new CategoryService(repository)
-    // const createCategory = makeCreateCategory()
 
-    // const newCategory = await createCategory(data)
+    const createCategory = makeCreateCategory()
 
-    const newCategory = await categoryService.create(data)
+    const newCategory = await createCategory(data)
 
     return res.status(201).json(newCategory)
   }
