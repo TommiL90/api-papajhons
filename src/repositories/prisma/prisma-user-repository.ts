@@ -1,7 +1,11 @@
 import prisma from '@/lib/prisma'
 import { UsersRepository } from '../user-repository'
-import { CreateUser } from '@/interfaces/users-interfaces-schema'
-import { $Enums } from '@prisma/client'
+import {
+  CreateUser,
+  UpdateUser,
+  User,
+  UserWithoutPassword,
+} from '@/interfaces/users-interfaces-schema'
 
 export class PrismaUserRepository implements UsersRepository {
   async create(data: CreateUser) {
@@ -36,46 +40,15 @@ export class PrismaUserRepository implements UsersRepository {
     return user
   }
 
-  findAll(): Promise<
-    {
-      id: string
-      username: string
-      firstName: string
-      lastName: string
-      email: string
-      password: string
-      role: $Enums.Role
-      createdAt: Date
-      updatedAt: Date
-    }[]
-  > {
-    throw new Error('Method not implemented.')
+  async findAll(): Promise<User[]> {
+    return await prisma.user.findMany()
   }
 
-  update(
-    id: string,
-    data: {
-      username?: string | undefined
-      firstName?: string | undefined
-      lastName?: string | undefined
-      email?: string | undefined
-      password?: string | undefined
-    },
-  ): Promise<{
-    id: string
-    username: string
-    firstName: string
-    lastName: string
-    email: string
-    password: string
-    role: $Enums.Role
-    createdAt: Date
-    updatedAt: Date
-  }> {
-    throw new Error('Method not implemented.')
+  async update(id: string, data: UpdateUser): Promise<UserWithoutPassword> {
+    return await prisma.user.update({ where: { id }, data })
   }
 
-  delete(id: string): Promise<void> {
-    throw new Error('Method not implemented.')
+  async delete(id: string): Promise<void> {
+    await prisma.user.delete({ where: { id } })
   }
 }

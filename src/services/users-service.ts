@@ -44,11 +44,11 @@ export class UserService {
     return ResCreateUserSchema.parse(user)
   }
 
-  async findAll() {
+  findAll = async () => {
     return await this.userRepository.findAll()
   }
 
-  async update(id: string, updateUserDto: UpdateUser) {
+  update = async (id: string, updateUserDto: UpdateUser) => {
     await this.findById(id)
 
     const updatedUser = await this.userRepository.update(id, updateUserDto)
@@ -56,7 +56,7 @@ export class UserService {
     return updatedUser
   }
 
-  async delete(id: string) {
+  delete = async (id: string) => {
     await this.findById(id)
 
     await this.userRepository.delete(id)
