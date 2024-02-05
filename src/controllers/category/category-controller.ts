@@ -1,9 +1,9 @@
 import { CreateCategory } from '@/interfaces/category-interfaces'
-import { makeCreateCategory } from '@/services/category/factories/make-create-category'
-import { makeDeleteCategory } from '@/services/category/factories/make-delete-category'
-import { makeListCategory } from '@/services/category/factories/make-list-categories'
-import { makeRetrieveCategory } from '@/services/category/factories/make-retrieve-category'
-import { makeUpdateCategory } from '@/services/category/factories/make-update-category'
+import { makeCreateCategory } from '@/services/factories/make-create-category'
+import { makeDeleteCategory } from '@/services/factories/make-delete-category'
+import { makeListCategory } from '@/services/factories/make-list-categories'
+import { makeRetrieveCategory } from '@/services/factories/make-retrieve-category'
+import { makeUpdateCategory } from '@/services/factories/make-update-category'
 import { Request, Response } from 'express'
 
 export class CategoryController {

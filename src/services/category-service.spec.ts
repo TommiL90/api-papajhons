@@ -1,12 +1,8 @@
-import { test, expect, describe, it, beforeEach } from 'vitest'
+import { expect, describe, it, beforeEach } from 'vitest'
 
 import { CategoryService } from './category-service'
 import { InMemoryCategoryRepository } from '@/repositories/memory/in-memory-category-respository'
-import {
-  Category,
-  CreateCategory,
-  UpdateCategory,
-} from '@/interfaces/category-interfaces'
+import { Category, UpdateCategory } from '@/interfaces/category-interfaces'
 import { AppError } from '@/errors/AppError'
 
 let categoryRepository: InMemoryCategoryRepository
