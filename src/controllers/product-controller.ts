@@ -2,14 +2,12 @@ import {
   CreateProduct,
   SearchProductsParams,
 } from '@/interfaces/product-interfaces'
-import { PrismaCategoryRepository } from '@/repositories/prisma/prisma-category-repository'
-import { PrismaProductsRepository } from '@/repositories/prisma/prisma-product-repository'
+import { redis } from '@/lib/redis'
 import { makeCreateProduct } from '@/services/factories/make-create-product'
 import { makeDeleteProduct } from '@/services/factories/make-delete-product'
 import { makeListProduct } from '@/services/factories/make-list-products'
 import { makeRetrieveProduct } from '@/services/factories/make-retrieve-product'
 import { makeUpdateProduct } from '@/services/factories/make-update-product'
-import { ProductsService } from '@/services/product-service'
 import { Request, Response } from 'express'
 
 export class ProductController {
@@ -19,10 +17,6 @@ export class ProductController {
     const createProduct = makeCreateProduct()
 
     const newProduct = await createProduct(data)
-
-    // const createProducts = makeCreateProduct()
-
-    // const newProduct = await createProducts(data)
 
     return res.status(201).json(newProduct)
   }
@@ -40,9 +34,32 @@ export class ProductController {
   findAll = async (req: Request, res: Response) => {
     const body: SearchProductsParams = req.query
 
+    const productsFromCache = await redis.get(
+      `products-${body.query ? body.query : ''}-${
+        body.categoryId ? body.categoryId : ''
+      }-${body.pageNumber ? body.pageNumber : ''}-${
+        body.pageSize ? body.pageSize : ''
+      }`,
+    )
+
+    if (productsFromCache) {
+      return res.status(200).json(JSON.parse(productsFromCache))
+    }
+
     const makeListProducts = makeListProduct()
 
     const products = await makeListProducts(body)
+
+    await redis.set(
+      `products-${body.query ? body.query : ''}-${
+        body.categoryId ? body.categoryId : ''
+      }-${body.pageNumber ? body.pageNumber : ''}-${
+        body.pageSize ? body.pageSize : ''
+      }`,
+      JSON.stringify(products),
+      'EX',
+      600,
+    )
 
     return res.status(200).json(products)
   }

@@ -1,4 +1,4 @@
-import { PurchaseOrdersController } from '@/controllers/purchase-order/purchase-order-controller'
+import { PurchaseOrdersController } from '@/controllers/purchase-order-controller'
 import { Router } from 'express'
 
 const purchaseOrders: Router = Router()
