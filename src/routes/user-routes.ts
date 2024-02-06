@@ -1,21 +1,16 @@
 import { Router } from 'express'
 
 import { UserController } from '@/controllers/user-controller'
-import { AuthSchema, CreateUserSchema } from '@/schemas/user-schema'
-import { BodyValidationMiddleware } from '@/middlewares/body-validation-middleware'
+import { CreateUserSchema } from '@/schemas/user-schema'
+import { validateBodyMiddleware } from '@/middlewares/body-validation-middleware'
 
 const userRouter: Router = Router()
 const userController = new UserController()
 
 userRouter.post(
   '/register',
-  BodyValidationMiddleware.execute(CreateUserSchema),
+  validateBodyMiddleware(CreateUserSchema),
   userController.createUser,
-)
-userRouter.post(
-  '/session',
-  BodyValidationMiddleware.execute(AuthSchema),
-  userController.authUser,
 )
 
 userRouter.get('', userController.findAll)

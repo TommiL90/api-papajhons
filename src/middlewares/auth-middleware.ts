@@ -5,13 +5,17 @@ import { Role } from '@prisma/client'
 import { NextFunction, Request, Response } from 'express'
 
 export class AuthorizationMiddleware {
-  static async authenticate(
+  static async verifyToken(
     req: Request,
     res: Response,
     next: NextFunction,
   ): Promise<Response | void> {
     const authToken = req.headers.authorization
-    if (!authToken) throw new AppError('Missing bearer token', 401)
+    if (!authToken) {
+      return res.status(401).json({
+        message: 'invalid token',
+      })
+    }
 
     const decoded: Decoded = await AuthService.validateToken(authToken)
     res.locals.userId = decoded.sub
@@ -19,7 +23,7 @@ export class AuthorizationMiddleware {
     next()
   }
 
-  static requireAuthorization(roleToVerify: Role = Role.USER) {
+  static verifyOwner(roleToVerify: Role = Role.USER) {
     return async (
       req: Request,
       res: Response,

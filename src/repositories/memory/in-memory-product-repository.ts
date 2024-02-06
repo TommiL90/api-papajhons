@@ -7,7 +7,6 @@ import {
 import { ProductsRepository } from '../product-repository'
 import { randomUUID } from 'crypto'
 import { AppError } from '@/errors/AppError'
-import { Decimal } from '@prisma/client/runtime'
 
 export class InMemoryProductRepository implements ProductsRepository {
   public items: Product[] = []
