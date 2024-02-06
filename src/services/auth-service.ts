@@ -3,7 +3,7 @@ import { env } from '@/env'
 import { AppError } from '@/errors/AppError'
 import { AuthUser } from '@/interfaces/users-interfaces-schema'
 import { UsersRepository } from '@/repositories/user-repository'
-import { compareSync } from 'bcryptjs'
+import { compare } from 'bcryptjs'
 import { sign, verify } from 'jsonwebtoken'
 
 export interface Decoded {
@@ -22,13 +22,10 @@ export class AuthService {
     if (!user) {
       throw new AppError('Invalid credentials', 403)
     }
-
-    const isPasswordCorrectlyHashed = compareSync(
-      payload.password,
-      user.password,
-    )
-
-    if (!isPasswordCorrectlyHashed) {
+    console.log(user.password, payload.password)
+    const passwordMatch = await compare(payload.password, user.password)
+    console.log(passwordMatch)
+    if (!passwordMatch) {
       throw new AppError('Invalid credentials', 403)
     }
 

@@ -6,13 +6,14 @@ import {
 } from '@/interfaces/users-interfaces-schema'
 import { UsersRepository } from '@/repositories/user-repository'
 import { ResCreateUserSchema } from '@/schemas/user-schema'
-import { hashSync } from 'bcryptjs'
+import { hash } from 'bcryptjs'
 
 export class UserService {
   constructor(private userRepository: UsersRepository) {}
 
   hashPassword = async (password: string): Promise<string> => {
-    return hashSync(password, 10)
+    const hashedPassword = await hash(password, 10)
+    return hashedPassword
   }
 
   create = async (payload: CreateUser): Promise<UserWithoutPassword> => {
@@ -22,8 +23,8 @@ export class UserService {
       throw new AppError('Email already exists', 409)
     }
 
-    const hashedPassword = await this.hashPassword(payload.email)
-
+    const hashedPassword = await this.hashPassword(payload.password)
+    console.log(hashedPassword)
     const data = await this.userRepository.create({
       ...payload,
       password: hashedPassword,
