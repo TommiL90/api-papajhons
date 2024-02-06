@@ -1,4 +1,4 @@
-import { ProductController } from '@/controllers/products/product-controller'
+import { ProductController } from '@/controllers/product-controller'
 import { Router } from 'express'
 
 const productRouter: Router = Router()

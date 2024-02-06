@@ -2,11 +2,14 @@ import {
   CreateProduct,
   SearchProductsParams,
 } from '@/interfaces/product-interfaces'
-import { makeCreateProduct } from '@/services/product/factories/make-create-product'
-import { makeDeleteProduct } from '@/services/product/factories/make-delete-product'
-import { makeListProduct } from '@/services/product/factories/make-list-products'
-import { makeRetrieveProduct } from '@/services/product/factories/make-retrieve-product'
-import { makeUpdateProduct } from '@/services/product/factories/make-update-product'
+import { PrismaCategoryRepository } from '@/repositories/prisma/prisma-category-repository'
+import { PrismaProductsRepository } from '@/repositories/prisma/prisma-product-repository'
+import { makeCreateProduct } from '@/services/factories/make-create-product'
+import { makeDeleteProduct } from '@/services/factories/make-delete-product'
+import { makeListProduct } from '@/services/factories/make-list-products'
+import { makeRetrieveProduct } from '@/services/factories/make-retrieve-product'
+import { makeUpdateProduct } from '@/services/factories/make-update-product'
+import { ProductsService } from '@/services/product-service'
 import { Request, Response } from 'express'
 
 export class ProductController {
@@ -16,6 +19,10 @@ export class ProductController {
     const createProduct = makeCreateProduct()
 
     const newProduct = await createProduct(data)
+
+    // const createProducts = makeCreateProduct()
+
+    // const newProduct = await createProducts(data)
 
     return res.status(201).json(newProduct)
   }

@@ -3,13 +3,13 @@ import { PrismaCategoryRepository } from '@/repositories/prisma/prisma-category-
 import { PrismaProductsRepository } from '@/repositories/prisma/prisma-product-repository'
 
 export const makeCreateProduct = () => {
-  const productRepository = new PrismaProductsRepository()
+  const productsRepository = new PrismaProductsRepository()
   const categoryRepository = new PrismaCategoryRepository()
 
-  const productService = new ProductsService(
-    productRepository,
+  const productsService = new ProductsService(
+    productsRepository,
     categoryRepository,
   )
 
-  return productService.create
+  return productsService.create
 }

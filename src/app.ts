@@ -4,9 +4,9 @@ import express from 'express'
 import cors from 'cors'
 import userRouter from './routes/user-routes'
 import { errorHandler } from './errors/AppError'
-import productRouter from './routes/product/product-routes'
+import productRouter from './routes/product-routes'
 import categoryRouter from './routes/category-routes'
-import purchaseOrders from './routes/purchase-orders/purchase-orders'
+import purchaseOrders from './routes/purchase-orders'
 
 const app = express()
 
@@ -19,9 +19,8 @@ app.get('/', (req, res) => {
 
 app.use('/users', userRouter)
 app.use('/categories', categoryRouter)
-// app.use('/products', productRouter)
-
-// app.use('/orders', purchaseOrders)
+app.use('/products', productRouter)
+app.use('/orders', purchaseOrders)
 
 app.use(errorHandler)
 

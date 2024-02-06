@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { AppError } from '@/errors/AppError'
-import { AuthService, Decoded } from '@/services/auth/auth-service'
+import { AuthService, Decoded } from '@/services/auth-service'
 import { Role } from '@prisma/client'
 import { NextFunction, Request, Response } from 'express'
 

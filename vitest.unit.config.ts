@@ -1,5 +1,5 @@
-import { configDefaults, defineConfig, mergeConfig } from 'vitest/config';
-import vitestConfig from './vitest.config';
+import { configDefaults, defineConfig, mergeConfig } from 'vitest/config'
+import vitestConfig from './vitest.config'
 
 export default mergeConfig(
   vitestConfig,
@@ -11,4 +11,4 @@ export default mergeConfig(
       ],
     },
   }),
-);
+)
