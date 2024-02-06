@@ -29,6 +29,7 @@ export class UserService {
       password: hashedPassword,
     })
 
+    
     const newUser = ResCreateUserSchema.parse(data)
 
     return newUser
