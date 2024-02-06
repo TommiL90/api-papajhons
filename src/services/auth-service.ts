@@ -23,7 +23,10 @@ export class AuthService {
       throw new AppError('Invalid credentials', 403)
     }
 
-    const isPasswordCorrectlyHashed = compareSync(payload.email, user.password)
+    const isPasswordCorrectlyHashed = compareSync(
+      payload.password,
+      user.password,
+    )
 
     if (!isPasswordCorrectlyHashed) {
       throw new AppError('Invalid credentials', 403)
