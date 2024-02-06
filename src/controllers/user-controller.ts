@@ -9,6 +9,7 @@ import { makeFindUserById } from '@/services/factories/make-find-user-by-id'
 import { makeFindAllUsers } from '@/services/factories/make-find-all-users'
 import { makeUpdateUser } from '@/services/factories/make-update-user'
 import { makeDeleteUser } from '@/services/factories/make-delete-user'
+import { redis } from '@/lib/redis'
 
 export class UserController {
   createUser = async (req: Request, res: Response) => {
@@ -39,9 +40,17 @@ export class UserController {
   }
 
   findAll = async (req: Request, res: Response) => {
+    const userFromCache = await redis.get('users')
+
+    if (userFromCache) {
+      return res.status(200).json(JSON.parse(userFromCache))
+    }
+
     const findAllUsers = makeFindAllUsers()
 
     const users = await findAllUsers()
+
+    await redis.set('users', JSON.stringify(users), 'EX', 600)
 
     return res.status(200).json(users)
   }
