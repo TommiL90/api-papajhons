@@ -1,11 +1,13 @@
 import {
   CreateProduct,
+  FetchProducts,
   Product,
   UpdateProduct,
 } from '@/interfaces/product-interfaces'
 import { ProductsRepository } from '../product-repository'
 import { randomUUID } from 'crypto'
 import { AppError } from '@/errors/AppError'
+import { Decimal } from '@prisma/client/runtime'
 
 export class InMemoryProductRepository implements ProductsRepository {
   public items: Product[] = []
@@ -13,7 +15,7 @@ export class InMemoryProductRepository implements ProductsRepository {
   async create(data: CreateProduct) {
     const createProduct: Product = {
       id: randomUUID().toString(),
-      name: data.name,
+      title: data.title,
       brand: data.brand,
       categoryId: data.categoryId,
       description: data.description,
@@ -29,7 +31,7 @@ export class InMemoryProductRepository implements ProductsRepository {
     return Promise.resolve(createProduct) as Promise<Product>
   }
 
-  async findOneById(id: string) {
+  async findById(id: string) {
     const Product = this.items.find((item) => item.id === id)
 
     if (!Product) {
@@ -39,7 +41,7 @@ export class InMemoryProductRepository implements ProductsRepository {
     return Product
   }
 
-  async findOneBySku(sku: number) {
+  async findBySku(sku: number) {
     const Product = this.items.find((item) => item.sku === sku)
 
     if (!Product) {
@@ -49,9 +51,13 @@ export class InMemoryProductRepository implements ProductsRepository {
     return Product
   }
 
-  async findAll() {
-    // console.log(this.items, 'aquiiiiiiii')
-    return Promise.resolve(this.items) as Promise<Product[]>
+  findAll(params: {
+    pageNumber?: number | undefined
+    pageSize?: number | undefined
+    categoryId?: string | undefined
+    query?: string | undefined
+  }): Promise<FetchProducts> {
+    throw new Error('Method not implemented.')
   }
 
   async update(id: string, data: UpdateProduct) {
@@ -63,7 +69,7 @@ export class InMemoryProductRepository implements ProductsRepository {
 
     const item = (this.items[itemIndex] = {
       ...this.items[itemIndex],
-      name: data.name || this.items[itemIndex].name,
+      title: data.title || this.items[itemIndex].title,
       brand: data.brand || this.items[itemIndex].brand,
       categoryId: data.categoryId || this.items[itemIndex].categoryId,
       description: data.description || this.items[itemIndex].description,

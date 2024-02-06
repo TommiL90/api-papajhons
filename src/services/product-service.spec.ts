@@ -1,6 +1,6 @@
 import { expect, describe, it, beforeEach } from 'vitest'
 import { InMemoryCategoryRepository } from '@/repositories/memory/in-memory-category-respository'
-import { Category, UpdateCategory } from '@/interfaces/category-interfaces'
+import { Category } from '@/interfaces/category-interfaces'
 import { AppError } from '@/errors/AppError'
 import { InMemoryProductRepository } from '@/repositories/memory/in-memory-product-repository'
 import { ProductsService } from './product-service'
@@ -10,49 +10,51 @@ import {
   Product,
   UpdateProduct,
 } from '@/interfaces/product-interfaces'
+import { Prisma } from '@prisma/client'
 
 let productRepository: InMemoryProductRepository
 let categoryRepository: InMemoryCategoryRepository
 let categoryService: CategoryService
 let productService: ProductsService
 
-describe('Auth service', () => {
+describe('Product service', () => {
   beforeEach(() => {
     productRepository = new InMemoryProductRepository()
     categoryRepository = new InMemoryCategoryRepository()
     categoryService = new CategoryService(categoryRepository)
-    productService = new ProductsService(productRepository, categoryService)
+    productService = new ProductsService(productRepository, categoryRepository)
   })
 
-  it('should be able to register a producst', async () => {
+  it('should be able to register a product', async () => {
     const createCategory: Category = await categoryService.create({
       name: 'category 1',
     })
+    console.log(createCategory)
     const createProduct: CreateProduct = {
-      name: 'Product 1',
+      title: 'Product 1',
       brand: 'brand 1 ',
       description: 'Some description',
       categoryId: createCategory.id,
       imgUrl: null,
-      price: 55.55,
+      price: new Prisma.Decimal('55.55'),
       sku: 293839,
       stock: 23344,
     }
-    const category: Product = await productService.create(createProduct)
+    const product: Product = await productService.create(createProduct)
 
-    expect(category.id).toEqual(expect.any(String))
-    expect(category).toBeDefined()
-    expect(category.name).toBe('Product 1')
+    expect(product.id).toEqual(expect.any(String))
+    expect(product).toBeDefined()
+    expect(product.title).toBe('Product 1')
   })
 
   it('should not be able to register a producst with incorrect category ID', async () => {
     const createProduct: CreateProduct = {
-      name: 'Product 1',
+      title: 'Product 1',
       brand: 'brand 1 ',
       description: 'Some description',
-      categoryId: 'Incorrect category id',
+      categoryId: '7829incorrect',
       imgUrl: null,
-      price: 55.55,
+      price: new Prisma.Decimal('55.55'),
       sku: 293839,
       stock: 23344,
     }
@@ -68,12 +70,12 @@ describe('Auth service', () => {
       name: 'category 1',
     })
     const createProduct: CreateProduct = {
-      name: 'Product 1',
+      title: 'Product 1',
       brand: 'brand 1 ',
       description: 'Some description',
       categoryId: createCategory.id,
       imgUrl: null,
-      price: 55.55,
+      price: new Prisma.Decimal('55.55'),
       sku: 293839,
       stock: 23344,
     }
@@ -82,7 +84,7 @@ describe('Auth service', () => {
     const findProduct = await productService.findById(category.id)
 
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-    expect(findProduct!.name).toEqual('Product 1')
+    expect(findProduct!.title).toEqual('Product 1')
     // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
     expect(findProduct!.categoryId).toEqual(createCategory.id)
   })
@@ -101,23 +103,23 @@ describe('Auth service', () => {
     })
     const products: CreateProduct[] = [
       {
-        name: 'Product 1',
+        title: 'Product 1',
         brand: 'brand 1 ',
         description: 'Some description',
         categoryId: createCategory.id,
         imgUrl: null,
-        price: 55.55,
+        price: new Prisma.Decimal('55.55'),
         sku: 293839,
         stock: 23344,
       },
       {
-        name: 'Product 2',
-        brand: 'brand 2 ',
+        title: 'Product 1',
+        brand: 'brand 1 ',
         description: 'Some description',
         categoryId: createCategory.id,
         imgUrl: null,
-        price: 55.55,
-        sku: 293839,
+        price: new Prisma.Decimal('55.55'),
+        sku: 293834,
         stock: 23344,
       },
     ]
@@ -126,17 +128,18 @@ describe('Auth service', () => {
       products.map(async (item) => await productService.create(item)),
     )
 
-    const result = await productService.findAll()
+    const params = {}
+    const result = await productService.findAll(params)
 
-    expect(result.length).toBe(2)
+    expect(result.data.length).toBe(2)
     expect(result).toBeDefined()
-    expect(Array.isArray(result)).toBe(true)
   })
 
   it('should be able return an empty list when there are no categories in the database', async () => {
-    const result = await productService.findAll()
+    const params = {}
+    const result = await productService.findAll(params)
 
-    expect(result.length).toBe(0)
+    expect(result.data.length).toBe(0)
   })
 
   it('should be able update a product', async () => {
@@ -145,18 +148,18 @@ describe('Auth service', () => {
     })
 
     const createProduct: CreateProduct = {
-      name: 'Product 1',
+      title: 'Product 1',
       brand: 'brand 1 ',
       description: 'Some description',
       categoryId: createdCategory.id,
       imgUrl: null,
-      price: 55.55,
-      sku: 293839,
+      price: new Prisma.Decimal('55.55'),
+      sku: 293834,
       stock: 23344,
     }
 
     const updateProduct: UpdateProduct = {
-      name: 'new name',
+      title: 'new name',
     }
 
     const newProduct: Product = await productService.create(createProduct)
@@ -164,14 +167,14 @@ describe('Auth service', () => {
     const res = await productService.update(newProduct.id, updateProduct)
 
     expect(res.id).toEqual(newProduct.id)
-    expect(res.name).toEqual('new name')
+    expect(res.title).toEqual('new name')
   })
 
   it('should not be able update a inexistent Product', async () => {
     const productId = 'invalidId'
 
-    const updateCategory: UpdateCategory = {
-      name: 'new name',
+    const updateCategory: UpdateProduct = {
+      title: 'new name',
     }
 
     try {
@@ -187,13 +190,13 @@ describe('Auth service', () => {
     })
 
     const createProduct: CreateProduct = {
-      name: 'Product 1',
+      title: 'Product 1',
       brand: 'brand 1 ',
       description: 'Some description',
       categoryId: createdCategory.id,
       imgUrl: null,
-      price: 55.55,
-      sku: 293839,
+      price: new Prisma.Decimal('55.55'),
+      sku: 293834,
       stock: 23344,
     }
 
