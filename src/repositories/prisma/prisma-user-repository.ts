@@ -20,7 +20,7 @@ export class PrismaUserRepository implements UsersRepository {
     const user = await prisma.user.findUnique({
       where: { email },
     })
-    console.log(user)
+
     return user
   }
 
