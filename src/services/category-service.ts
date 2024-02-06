@@ -8,17 +8,16 @@ import { CategoryRepository } from '@/repositories/category-repository'
 export class CategoryService {
   constructor(private categoryRepository: CategoryRepository) {}
 
-  async create(createCategory: CreateCategory) {
+  create = async (createCategory: CreateCategory) => {
     const newCategory = await this.categoryRepository.create(createCategory)
-
     return newCategory
   }
 
-  async findAll() {
+  findAll = async () => {
     return await this.categoryRepository.findAll()
   }
 
-  async findById(id: string) {
+  findById = async (id: string) => {
     const retrieveCategory = await this.categoryRepository.findById(id)
 
     if (!retrieveCategory) {
@@ -28,7 +27,7 @@ export class CategoryService {
     return retrieveCategory
   }
 
-  async update(id: string, updateCategory: UpdateCategory) {
+  update = async (id: string, updateCategory: UpdateCategory) => {
     await this.findById(id)
 
     const updatedCategory = await this.categoryRepository.update(
@@ -39,7 +38,7 @@ export class CategoryService {
     return updatedCategory
   }
 
-  async delete(id: string) {
+  delete = async (id: string) => {
     await this.findById(id)
     await this.categoryRepository.delete(id)
   }

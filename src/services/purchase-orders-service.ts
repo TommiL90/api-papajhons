@@ -20,14 +20,17 @@ export class PurchaseOrdersService {
     private useRepository: UsersRepository,
   ) {}
 
-  async createPurchaseOrders(
-    createPurchaseOrders: Omit<CreatePurchaseOrders, 'status'>,
-  ): Promise<PurchaseOrders> {
+  createPurchaseOrders = async (
+    createPurchaseOrders: Omit<CreatePurchaseOrders, 'status' | 'paid'>,
+  ): Promise<PurchaseOrders> => {
     const createPurchaseOrderComplete: CreatePurchaseOrders = {
       ...createPurchaseOrders,
+      paid: false,
       status: OrdersStatus.CREATED,
     }
+
     await this.checkUser(createPurchaseOrders.userId)
+
     const order = await this.findCreatedStatusByUserId(
       createPurchaseOrders.userId,
     )
@@ -41,15 +44,15 @@ export class PurchaseOrdersService {
     )
   }
 
-  async findAll(): Promise<PurchaseOrders[]> {
+  findAll = async (): Promise<PurchaseOrders[]> => {
     return await this.purchaseOrdersRepository.findAll()
   }
 
-  async findAllByUserId(userId: string): Promise<PurchaseOrders[]> {
+  findAllByUserId = async (userId: string): Promise<PurchaseOrders[]> => {
     return await this.purchaseOrdersRepository.findAllByUserId(userId)
   }
 
-  async findById(id: string): Promise<PurchaseOrders> {
+  findById = async (id: string): Promise<PurchaseOrders> => {
     const order = await this.purchaseOrdersRepository.findById(id)
     if (!order) {
       throw new AppError(`Order with ID ${id} not found`)
@@ -57,10 +60,13 @@ export class PurchaseOrdersService {
     return order
   }
 
-  async payPurchaseOrder(idPurchaseOrder: string): Promise<PurchaseOrders> {
+  payPurchaseOrder = async (
+    idPurchaseOrder: string,
+  ): Promise<PurchaseOrders> => {
     const updatePurchaseOrder: UpdatePurchaseOrder = {
       paid: true,
     }
+
     await this.findById(idPurchaseOrder)
 
     return await this.purchaseOrdersRepository.updateStatus(
@@ -69,10 +75,10 @@ export class PurchaseOrdersService {
     )
   }
 
-  async sendPurchaseOrder(
+  sendPurchaseOrder = async (
     idPurchaseOrder: string,
     createPurchaseOrdersItems: Omit<CreatePurchaseOrderItem, 'orderId'>[],
-  ): Promise<PurchaseOrders> {
+  ): Promise<PurchaseOrders> => {
     await Promise.all(
       createPurchaseOrdersItems.map((item) => {
         return this.createPurchaseOrderItem({
@@ -81,9 +87,11 @@ export class PurchaseOrdersService {
         })
       }),
     )
+
     const updatePurchaseOrder: UpdatePurchaseOrder = {
       status: OrdersStatus.RUNNING,
     }
+
     await this.findById(idPurchaseOrder)
 
     return await this.purchaseOrdersRepository.updateStatus(
@@ -92,9 +100,9 @@ export class PurchaseOrdersService {
     )
   }
 
-  async deliveredPurchaseOrder(
+  deliveredPurchaseOrder = async (
     idPurchaseOrder: string,
-  ): Promise<PurchaseOrders> {
+  ): Promise<PurchaseOrders> => {
     const order = await this.findById(idPurchaseOrder)
 
     if (order.status === OrdersStatus.FAILURE) {
@@ -104,6 +112,7 @@ export class PurchaseOrdersService {
     const updatePurchaseOrder: UpdatePurchaseOrder = {
       status: OrdersStatus.DONE,
     }
+
     await this.findById(idPurchaseOrder)
 
     return await this.purchaseOrdersRepository.updateStatus(
@@ -112,12 +121,13 @@ export class PurchaseOrdersService {
     )
   }
 
-  async failureSendPurchaseOrder(
+  failureSendPurchaseOrder = async (
     idPurchaseOrder: string,
-  ): Promise<PurchaseOrders> {
+  ): Promise<PurchaseOrders> => {
     const updatePurchaseOrder: UpdatePurchaseOrder = {
       status: OrdersStatus.FAILURE,
     }
+
     await this.findById(idPurchaseOrder)
 
     return await this.purchaseOrdersRepository.updateStatus(
@@ -126,16 +136,16 @@ export class PurchaseOrdersService {
     )
   }
 
-  private async checkUser(userId: string): Promise<void> {
+  private checkUser = async (userId: string): Promise<void> => {
     const foundUser = await this.useRepository.findById(userId)
     if (!foundUser) {
       throw new AppError(`User with ID ${userId} not found`)
     }
   }
 
-  private async findCreatedStatusByUserId(
+  private findCreatedStatusByUserId = async (
     userId: string,
-  ): Promise<PurchaseOrders | null> {
+  ): Promise<PurchaseOrders | null> => {
     const status: OrdersStatus = OrdersStatus.CREATED
     return await this.purchaseOrdersRepository.findCreatedStatusByUserId(
       userId,
@@ -143,13 +153,14 @@ export class PurchaseOrdersService {
     )
   }
 
-  private async createPurchaseOrderItem(
+  private createPurchaseOrderItem = async (
     createPurchaseOrderItem: CreatePurchaseOrderItem,
-  ): Promise<PurchaseOrderItem> {
+  ): Promise<PurchaseOrderItem> => {
     const order = await this.findById(createPurchaseOrderItem.purchaseOrderId)
     if (order.paid === false) {
       throw new AppError('Order not paid')
     }
+
     const newOrderProduct = await this.purchaseOrderItemRepository.create(
       createPurchaseOrderItem,
     )

@@ -13,10 +13,10 @@ export class ProductsService {
     private categoryRepository: CategoryRepository,
   ) {}
 
-  async create(createProduct: CreateProduct) {
+  create = async (createProduct: CreateProduct) => {
     await this.verifyCategory(createProduct.categoryId)
 
-    const findProduct = await this.productsRepository.findOneBySku(
+    const findProduct = await this.productsRepository.findBySku(
       createProduct.sku,
     )
     if (findProduct) {
@@ -26,19 +26,19 @@ export class ProductsService {
     return this.productsRepository.create(createProduct)
   }
 
-  findAll(params: SearchProductsParams) {
+  findAll = (params: SearchProductsParams) => {
     return this.productsRepository.findAll(params)
   }
 
-  findById(id: string) {
-    const product = this.productsRepository.findOneById(id)
+  findById = (id: string) => {
+    const product = this.productsRepository.findById(id)
     if (!product) {
       throw new AppError('Product not found')
     }
     return product
   }
 
-  update(id: string, updateProduct: UpdateProduct) {
+  update = (id: string, updateProduct: UpdateProduct) => {
     const product = this.productsRepository.update(id, updateProduct)
     if (!product) {
       throw new AppError('Product not found')
@@ -46,7 +46,7 @@ export class ProductsService {
     return product
   }
 
-  delete(id: string) {
+  delete = (id: string) => {
     const deletedProduct = this.productsRepository.delete(id)
     if (!deletedProduct) {
       throw new AppError('Product not found')
@@ -54,7 +54,7 @@ export class ProductsService {
     return deletedProduct
   }
 
-  private async verifyCategory(categoryId: string) {
+  private verifyCategory = async (categoryId: string) => {
     const findCategory = await this.categoryRepository.findById(categoryId)
     if (!findCategory) {
       throw new AppError('Category not found')

@@ -4,7 +4,7 @@ import { Category, UpdateCategory } from '@/interfaces/category-interfaces'
 import { AppError } from '@/errors/AppError'
 import { InMemoryProductRepository } from '@/repositories/memory/in-memory-product-repository'
 import { ProductsService } from './product-service'
-import { CategoryService } from '../category-service'
+import { CategoryService } from './category-service'
 import {
   CreateProduct,
   Product,
