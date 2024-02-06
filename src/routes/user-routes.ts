@@ -5,6 +5,7 @@ import { CreateUserSchema } from '@/schemas/user-schema'
 import { validateBodyMiddleware } from '@/middlewares/body-validation-middleware'
 import { verifyTokenMiddleware } from '@/middlewares/verify-token-middleware'
 import { verifyOwnerMiddleware } from '@/middlewares/verify-owner-middleware'
+import { Role } from '@prisma/client'
 
 const userRouter: Router = Router()
 const userController = new UserController()
@@ -15,25 +16,31 @@ userRouter.post(
   userController.createUser,
 )
 
-userRouter.get('', userController.findAll)
+userRouter.get(
+  '',
+  verifyTokenMiddleware,
+  verifyOwnerMiddleware(Role.ADMIN),
+  userController.findAll,
+)
 
 userRouter.get(
   '/:id',
   verifyTokenMiddleware,
-  verifyOwnerMiddleware,
+  verifyOwnerMiddleware(),
   userController.findById,
 )
 
 userRouter.patch(
   '/:id',
-
-  // middlewares.validateBodyMiddleware(updateUserSchema),
+  verifyTokenMiddleware,
+  verifyOwnerMiddleware(),
   userController.update,
 )
 
 userRouter.delete(
   '/:id',
-
+  verifyTokenMiddleware,
+  verifyOwnerMiddleware(),
   userController.delete,
 )
 

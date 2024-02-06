@@ -4,7 +4,7 @@ import { Router } from 'express'
 const purchaseOrders: Router = Router()
 const purchaseOrder = new PurchaseOrdersController()
 
-purchaseOrders.post('', purchaseOrder.create)
+purchaseOrders.post('/create', purchaseOrder.create)
 
 purchaseOrders.get('/:id', purchaseOrder.findById)
 
