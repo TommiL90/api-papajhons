@@ -14,14 +14,3 @@ export const validateBodyMiddleware =
 
     return next()
   }
-
-// export class BodyValidationMiddleware {
-//   static execute(
-//     schema: ZodTypeAny,
-//   ): (request: Request, response: Response, next: NextFunction) => void {
-//     return (request: Request, response: Response, next: NextFunction): void => {
-//       request.body = schema.parse(request.body)
-//       next()
-//     }
-//   }
-// }

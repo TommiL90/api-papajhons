@@ -5,9 +5,10 @@ import cors from 'cors'
 import userRouter from './routes/user-routes'
 import productRouter from './routes/product-routes'
 import categoryRouter from './routes/category-routes'
-import purchaseOrders from './routes/purchase-orders'
-import authRoute from './routes/auth-routes'
+import purchaseOrdersRouter from './routes/purchase-orders'
+import authRouter from './routes/auth-routes'
 import { handleAppError } from './errors/AppError'
+import productPurchaseOrderItemRouter from './routes/purchase-order-item-routes'
 
 const app = express()
 
@@ -21,8 +22,9 @@ app.get('/', (req, res) => {
 app.use('/users', userRouter)
 app.use('/categories', categoryRouter)
 app.use('/products', productRouter)
-app.use('/orders', purchaseOrders)
-app.use('/session', authRoute)
+app.use('/orders', purchaseOrdersRouter)
+app.use('/product-order-items', productPurchaseOrderItemRouter)
+app.use('/session', authRouter)
 
 app.use(handleAppError)
 

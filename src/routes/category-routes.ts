@@ -1,6 +1,11 @@
 import { CategoryController } from '@/controllers/category-controller'
+import { validateBodyMiddleware } from '@/middlewares/body-validation-middleware'
 import { verifyOwnerMiddleware } from '@/middlewares/verify-owner-middleware'
 import { verifyTokenMiddleware } from '@/middlewares/verify-token-middleware'
+import {
+  CreateCategorySchema,
+  UpdateCategorySchema,
+} from '@/schemas/category-schema'
 import { Role } from '@prisma/client'
 
 import { Router } from 'express'
@@ -12,6 +17,7 @@ categoryRouter.post(
   '',
   verifyTokenMiddleware,
   verifyOwnerMiddleware(Role.ADMIN),
+  validateBodyMiddleware(CreateCategorySchema),
   categoryController.create,
 )
 
@@ -23,6 +29,7 @@ categoryRouter.patch(
   '/:id',
   verifyTokenMiddleware,
   verifyOwnerMiddleware(Role.ADMIN),
+  validateBodyMiddleware(UpdateCategorySchema),
   categoryController.update,
 )
 

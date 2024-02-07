@@ -57,7 +57,8 @@ const createProducts = async () => {
   }
 }
 async function main() {
-  await createProducts()
+  const result = await prisma.product.findMany()
+  console.log(result.length)
 }
 
 main()

@@ -1,23 +1,29 @@
 import { PurchaseOrdersController } from '@/controllers/purchase-order-controller'
+import { validateBodyMiddleware } from '@/middlewares/body-validation-middleware'
+import { PurchaseOrdersCreateSchema } from '@/schemas/purchase-orders-schema'
 import { Router } from 'express'
 
-const purchaseOrders: Router = Router()
+const purchaseOrdersRouter: Router = Router()
 const purchaseOrder = new PurchaseOrdersController()
 
-purchaseOrders.post('/create', purchaseOrder.create)
+purchaseOrdersRouter.post(
+  '/create',
+  validateBodyMiddleware(PurchaseOrdersCreateSchema),
+  purchaseOrder.create,
+)
 
-purchaseOrders.get('/:id', purchaseOrder.findById)
+purchaseOrdersRouter.get('/:id', purchaseOrder.findById)
 
-purchaseOrders.get('/user/:userId', purchaseOrder.findAllByUserId)
+purchaseOrdersRouter.get('/user/:userId', purchaseOrder.findAllByUserId)
 
-purchaseOrders.get('', purchaseOrder.findAll)
+purchaseOrdersRouter.get('', purchaseOrder.findAll)
 
-purchaseOrders.patch('/pay/:id', purchaseOrder.pay)
+purchaseOrdersRouter.patch('/pay/:id', purchaseOrder.pay)
 
-purchaseOrders.patch('/send/:id', purchaseOrder.send)
+purchaseOrdersRouter.patch('/send/:id', purchaseOrder.send)
 
-purchaseOrders.patch('/delivered/:id', purchaseOrder.delivered)
+purchaseOrdersRouter.patch('/delivered/:id', purchaseOrder.delivered)
 
-purchaseOrders.patch('/failure/:id', purchaseOrder.failure)
+purchaseOrdersRouter.patch('/failure/:id', purchaseOrder.failure)
 
-export default purchaseOrders
+export default purchaseOrdersRouter

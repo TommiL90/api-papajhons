@@ -15,19 +15,19 @@ export class PurchaseOrdersController {
 
     const create = makeCreatePurchaseOrder()
 
-    const newProduct = await create(data)
+    const createPurchaseOrder = await create(data)
 
-    return res.status(201).json(newProduct)
+    return res.status(201).json(createPurchaseOrder)
   }
 
   findById = async (req: Request, res: Response) => {
     const { id } = req.params
 
-    const purchaseOrder = makeFindById()
+    const findId = makeFindById()
 
-    const products = await purchaseOrder(id)
+    const purchaseOrder = await findId(id)
 
-    return res.status(200).json(products)
+    return res.status(200).json(purchaseOrder)
   }
 
   findAllByUserId = async (req: Request, res: Response) => {
@@ -53,9 +53,9 @@ export class PurchaseOrdersController {
 
     const pay = makePayPurchaseOrder()
 
-    const updatedProduct = await pay(id)
+    const updatedPurchaseOrders = await pay(id)
 
-    return res.status(200).json(updatedProduct)
+    return res.status(200).json(updatedPurchaseOrders)
   }
 
   send = async (req: Request, res: Response) => {
@@ -63,9 +63,9 @@ export class PurchaseOrdersController {
 
     const send = makeSendPurchaseOrder()
 
-    const updatedProduct = await send(id, req.body)
+    const updatedPurchaseOrders = await send(id, req.body)
 
-    return res.status(200).json(updatedProduct)
+    return res.status(200).json(updatedPurchaseOrders)
   }
 
   delivered = async (req: Request, res: Response) => {
@@ -73,9 +73,9 @@ export class PurchaseOrdersController {
 
     const delivered = makeDeliveredPurchaseOrder()
 
-    const updatedProduct = await delivered(id)
+    const updatedPurchaseOrders = await delivered(id)
 
-    return res.status(200).json(updatedProduct)
+    return res.status(200).json(updatedPurchaseOrders)
   }
 
   failure = async (req: Request, res: Response) => {
@@ -83,8 +83,8 @@ export class PurchaseOrdersController {
 
     const failure = makeFailurePurchaseOrder()
 
-    const updatedProduct = await failure(id)
+    const updatedPurchaseOrders = await failure(id)
 
-    return res.status(200).json(updatedProduct)
+    return res.status(200).json(updatedPurchaseOrders)
   }
 }
