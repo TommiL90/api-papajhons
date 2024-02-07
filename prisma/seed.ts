@@ -5,7 +5,7 @@ import { randomUUID } from 'crypto'
 const prisma = new PrismaClient()
 
 const createUsers = async () => {
-  for (let i = 0; i < 3000; i++) {
+  for (let i = 0; i < 300; i++) {
     const username = `${faker.internet.userName()}-${i}`
     const email = `${faker.internet.userName()}-${i}@mail.com`
     const user = await prisma.user.create({
@@ -39,7 +39,7 @@ const retrieveCategories = async () => {
 }
 
 const createProducts = async () => {
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 1500; i++) {
     const category = await retrieveCategories()
 
     const product = await prisma.product.create({
@@ -57,8 +57,8 @@ const createProducts = async () => {
   }
 }
 async function main() {
-  const result = await prisma.product.findMany()
-  console.log(result.length)
+  await Promise.all([createUsers(), createCategories()])
+  await createProducts()
 }
 
 main()

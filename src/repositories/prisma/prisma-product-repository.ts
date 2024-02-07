@@ -25,13 +25,9 @@ export class PrismaProductsRepository implements ProductsRepository {
   }
 
   async findAll(params: SearchProductsParams): Promise<FetchProducts> {
-    const url = 'URL'
-    const { categoryId, query, pageNumber, pageSize } = params
-    const page = pageNumber || 1
-    const take = pageSize || 20
-    const skip = (page - 1) * take
+    const { categoryId, query, pageNumber: page, pageSize: take } = params
+    const skip = (page! - 1) * take!
     const where: any = {}
-    console.log('aqui')
     if (categoryId !== undefined) {
       where.categoryId = categoryId
     }
@@ -55,21 +51,8 @@ export class PrismaProductsRepository implements ProductsRepository {
 
     const [products, total] = await Promise.all([productsPromise, totalPromise])
 
-    const pages: number = Math.ceil(total / take)
-
-    const prevPage: string | null =
-      page === 1 ? null : `${url}?pageNumber=${page! - 1}&pageSize=${take}`
-    const nextPage: string | null =
-      page! + 1 > pages
-        ? null
-        : `${url}?pageNumber=${page! + 1}&pageSize=${take}`
-    console.log(nextPage, prevPage, total, pages, products)
-
     return {
-      nextPage,
-      prevPage,
-      items: total,
-      pages,
+      count: total,
       data: products,
     }
   }
