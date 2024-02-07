@@ -21,7 +21,7 @@ export class PurchaseOrdersService {
   createPurchaseOrders = async (
     createPurchaseOrders: CreatePurchaseOrderWithItems,
   ): Promise<PurchaseOrders> => {
-    const { userId, orderItems } = createPurchaseOrders
+    const { userId, createOrderItems } = createPurchaseOrders
     const createPurchaseOrder: CreatePurchaseOrders = {
       userId,
       paid: false,
@@ -36,14 +36,14 @@ export class PurchaseOrdersService {
 
     const { id } = purchaseOrder
 
-    const orderItemsWithPurchaseOrderId: CreatePurchaseOrderItem[] =
-      orderItems.map((item) => ({
+    const createOrderItemsWithPurchaseOrderId: CreatePurchaseOrderItem[] =
+      createOrderItems.map((item) => ({
         ...item,
         purchaseOrderId: id,
       }))
 
     await this.purchaseOrderItemService.createPurchaseOrderItems(
-      orderItemsWithPurchaseOrderId,
+      createOrderItemsWithPurchaseOrderId,
     )
 
     return purchaseOrder

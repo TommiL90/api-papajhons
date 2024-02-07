@@ -37,5 +37,5 @@ export const CreatePurchaseOrderWithItemsSchema =
     paid: true,
     status: true,
   }).extend({
-    orderItems: PurchaseOrderItemsInOrder,
+    createOrderItems: PurchaseOrderItemsInOrder,
   })

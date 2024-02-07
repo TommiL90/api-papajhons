@@ -6,11 +6,12 @@ import {
   SearchProductsParams,
   UpdateProduct,
 } from '@/interfaces/product-interfaces'
+import { Prisma } from '@prisma/client'
 
 export class PrismaProductsRepository implements ProductsRepository {
   async create(data: CreateProduct) {
     const product = await prisma.product.create({
-      data,
+      data: { ...data, price: new Prisma.Decimal(data.price) },
     })
 
     return product
@@ -60,7 +61,12 @@ export class PrismaProductsRepository implements ProductsRepository {
   async update(id: string, updateProduct: UpdateProduct) {
     const updatedProduct = await prisma.product.update({
       where: { id },
-      data: updateProduct,
+      data: {
+        ...updateProduct,
+        price: updateProduct.price
+          ? new Prisma.Decimal(updateProduct.price)
+          : undefined,
+      },
     })
 
     return updatedProduct

@@ -9,8 +9,8 @@ const createAdmin = async () => {
   const hashedPassword = await hash('123456', 10)
   const user = await prisma.user.create({
     data: {
-      username: 'admin2',
-      email: 'admin2@mail.com',
+      username: 'admin3',
+      email: 'admin3@mail.com',
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
       password: hashedPassword,

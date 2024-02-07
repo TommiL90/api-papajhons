@@ -34,6 +34,13 @@ export class PrismaPurchaseOrdersRepository
   findById(id: string) {
     return prisma.purchaseOrders.findUnique({
       where: { id },
+      include: {
+        purchaseOrderItems: {
+          include: {
+            product: true,
+          },
+        },
+      },
     })
   }
 
