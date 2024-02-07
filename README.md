@@ -83,7 +83,7 @@ Segue os links para mais informações sobre as tecnologias utilizadas:
 
 Diagrama ER da API definindo bem as relações entre as tabelas do banco de dados.
 
-![Diagrama do projeto com suas relações!](https://dbdiagram.io/d/E-commerce-65bf06c7ac844320ae63729e)
+[Diagrama do projeto com suas relações!](https://dbdiagram.io/d/E-commerce-65bf06c7ac844320ae63729e)
 
 ---
 
