@@ -95,11 +95,8 @@ Diagrama ER da API definindo bem as relações entre as tabelas do banco de dado
 
 Clone o projeto em sua máquina e instale as dependências com o comando:
 
-`yarn install ou yarn`
-
-Utilizando npm
-
 `npm install`
+
 
 ### 3.2. Variáveis de Ambiente
 
@@ -109,25 +106,31 @@ Em seguida, crie um arquivo **.env**, copiando o formato do arquivo **.env.examp
 
 Configure suas variáveis de ambiente com suas credenciais do Postgres e uma nova database da sua escolha, a porta do localhost, a chave secreta para criação do hash da senha, o SMTP_USER e o SMTP_PASS para ser utilizado como e-mail que enviará a recuperação de senha, a url base do Back-End e a url base do Front-End para ser utilizada a recuperação de senha.
 
+Levante banco de dados Postgree y Redis:
+
+`docker compose up -d`
+
+
 ### 3.3. Migrations
 
-Suba suas migrations com o comando:
+Migre as entidases e popule o banco de dados:
 
-`npx prisma migrate dev`
+`npx prisma migrate deploy && npx prisma db seed`
+
 
 ### 3.4. Rodando a API
 
 Para rodar a API localmente use o comando:
 
-`yarn run dev`
+`npm run dev`
 
 Segue abaixo os comandos para a build do projeto:
 
-`yarn run build`
+`npm run build`
 
 e
 
-`yarn run start`
+`npm run start`
 
 ## 4. Documentação da API
 
@@ -137,7 +140,6 @@ e
 Essa documentação descreve os recusos que a API possuí, como Endpoints, exemplos de requisição, exemplos de retorno e metodos de autenticação.
 Também é possível acessar a documentação da API pelos seguintes links:
 
-- [Contacts-Book-Documentação-em-produção]([https://contacts-book-api-6ydl.onrender.com/api-docs/](https://motor-shop-t14.onrender.com/api-docs/))
 
 ---
 
@@ -149,29 +151,33 @@ Também é possível acessar a documentação da API pelos seguintes links:
 
 - [Users](#1-users)
   - POST - /user
-  - GET - /user
+  - GET - /user/:userId
   - GET - /user/all
-  - PATCH - /user
-  - DELETE - /user
-  - PUT - /user
-  - POST - /user/resetPassword
-  - PATCH - /user/resetPassword/:resetTokenId
-- [Address](#2-address)
-  - Nenhum endpoint
-- [Cars](#3-cars)
-  - POST - /cars
-  - GET - /cars
-  - GET - /cars/user/:userId
-  - GET - /cars/:carId
-  - PATCH - /cars/:carId
-  - DELETE - /cars/:carId
-- [CarImages](#4-carimages)
-  - Nenhum endpoint
-- [Comments](#5-comments)
-  - POST - /comments/:carId
-  - GET - /comments/:carId
-- [Filters](#6-filters)
-  - GET - /filters?:filterName=:filterValue (paramêtro de filtragem opcional)
+  - PATCH - /user/:userId
+  - DELETE - /user/:userId
+  - POST - /session/:userId
+- [Products](#2-products)
+  - POST - /products
+  - GET - /products
+  - GET - /products/:id
+  - GET - /products/:id
+  - PATCH - /products/:id
+  - DELETE - /products/:id
+- [Products](#3-categories)
+  - POST - /products
+  - GET - /products
+  - GET - /products/:id
+  - GET - /products/:id
+  - PATCH - /products/:id
+  - DELETE - /products/:id
+- [Comments](#4-purchase-orders)
+  - POST - /purchase-orders/create
+  - PATCH - /purchase-orders/send
+  - PATCH - /purchase-orders/pay
+  - PATCH - /purchase-orders/delivered
+  - GET - /purchase-orders/:purchaseOrderId
+  - GET - /purchase-orders/user/:userId
+
 
 ---
 
