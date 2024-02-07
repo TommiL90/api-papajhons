@@ -32,37 +32,30 @@ A API cumple os seguintes requermentos:
 - [x] Deve ser possível se cadastrar;
 - [x] Deve ser possível se autenticar;
 - [x] Deve ser possível obter o perfil de um usuário logado;
-- [x] Deve ser possível obter o número de check-ins realizados pelo usuário logado;
-- [x] Deve ser possível o usuário obter o seu histórico de check-ins;
-- [x] Deve ser possível o usuário buscar academias próximas (até 10km);
-- [x] Deve ser possível o usuário buscar academias pelo nome;
-- [x] Deve ser possível o usuário realizar check-in em uma academia;
-- [x] Deve ser possível validar o check-in de um usuário;
-- [x] ser possível cadastrar uma academia;
-- [ ] Deve ser possível o gerenciamento de produtos (criação, deleção, atualização)
-- [ ] Deve ser possível a busca de produtos com paginação e com a possibilidade de utilização de filtros
-- [ ] Deve ser possívelBusca por de produto por id
-- [ ] Deve ser possívelBusca de produtos por categoria
-
-Também seria muito legal se você também implementasse:
-- [ ] Gerenciamento de usuários (criação, deleção, atualização, leitura)
-- [ ] Geração de pedido de compras com produtos selecionados
-- [ ] Histórico de pedidos
-- [ ] Permitir filtrar pedidos gerados 
+- [x] Deve ser possível o usuário admin obter o um histórico de ordens de produtos de um usuario;
+- [x] Deve ser possível o usuário buscar produtos pelo nome;
+- [x] Deve ser possível ser possível cadastrar uma academia;
+- [x] Deve ser possível o gerenciamento de produtos (criação, deleção, atualização);
+- [x] Deve ser possível a busca de produtos com paginação e com a possibilidade de utilização de filtros;
+- [x] Deve ser possível a busca por de produto por id;
+- [x] Deve ser possível a busca de produtos por categoria;
+- [x] Deve ser possível o gerenciamento de usuários (criação, deleção, atualização, leitura);
+- [x] Deve ser possível a geração de pedido de compras com produtos selecionados;
+- [x] Deve ser possível permitir filtrar pedidos gerados; 
 
 ## RNs (Regras de negócio)
 
 - [x] O usuário não deve poder se cadastrar com um e-mail duplicado;
 - [x] O usuário não deve poder se cadastrar com um username duplicado;
 - [x] O usuário não pode criar uma categoria con nome existente;
-- [x] Usuários administradores têm acesso completo a todas as rotas.
-- [x] Usuários normais podem acessar todas as rotas de leitura.
-- [x] Usuários normais não podem acessar a rota de listagem de usuários.
-- [x] Usuários normais não podem acessar a rota de listagem de ordens de produtos criadas.
-- [x] Usuários normais não têm permissão para criar usuários.
-- [x] Usuários normais não têm permissão para editar, ver o perfil ou deletar outros usuários.
-- [x] Usuários normais têm permissão para criar ordens de compra.
-- [x] Apenas rota de listagem de produtos e listagem de um produto não precisa autentição.
+- [x] Usuários administradores têm acesso completo a todas as rotas;
+- [x] Usuários normais podem acessar todas as rotas de leitura;
+- [x] Usuários normais não podem acessar a rota de listagem de usuários;
+- [x] Usuários normais não podem acessar a rota de listagem de ordens de produtos criadas;
+- [x] Usuários normais não têm permissão para criar usuários;
+- [x] Usuários normais não têm permissão para editar, ver o perfil ou deletar outros usuários;
+- [x] Usuários normais têm permissão para criar ordens de compra;
+- [x] Apenas rota de listagem de produtos e listagem de um produto não precisa autentição;
 - [x] Um produto só pode ser cadastrada por administradores;
 
 ## RNFs (Requisitos não-funcionais)
@@ -79,8 +72,10 @@ Segue os links para mais informações sobre as tecnologias utilizadas:
 - [Express](https://expressjs.com/pt-br/)
 - [TypeScript](https://www.typescriptlang.org/)
 - [PostgreSQL](https://www.postgresql.org/)
+- [Redis](https://redis.io)
 - [Prisma](https://www.prisma.io/)
 - [Zod](https://zod.dev/)
+- [Docker](https://www.docker.com/)
 
 ---
 
@@ -88,7 +83,7 @@ Segue os links para mais informações sobre as tecnologias utilizadas:
 
 Diagrama ER da API definindo bem as relações entre as tabelas do banco de dados.
 
-![Diagrama do projeto com suas relações!](https://i.ibb.co/VS95973/DER-motor-shop.png "Motor-Shop-Diragrama")
+![Diagrama do projeto com suas relações!](https://dbdiagram.io/d/E-commerce-65bf06c7ac844320ae63729e)
 
 ---
 
