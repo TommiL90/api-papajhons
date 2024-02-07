@@ -1,11 +1,12 @@
 import { AppError } from '@/errors/AppError'
 import {
   CreateUser,
+  PaginatedUsers,
   UpdateUser,
   UserWithoutPassword,
 } from '@/interfaces/users-interfaces-schema'
 import { UsersRepository } from '@/repositories/user-repository'
-import { ResCreateUserSchema } from '@/schemas/user-schema'
+import { ResCreateUserSchema, UsersListSchema } from '@/schemas/user-schema'
 import { hash } from 'bcryptjs'
 
 export class UserService {
@@ -45,8 +46,31 @@ export class UserService {
     return ResCreateUserSchema.parse(user)
   }
 
-  findAll = async () => {
-    return await this.userRepository.findAll()
+  findAll = async (
+    page: number,
+    take: number,
+    baseUrl: string,
+  ): Promise<PaginatedUsers> => {
+    const skip = (page - 1) * take
+    const { data, count } = await this.userRepository.findAll(skip, take)
+    const users = UsersListSchema.parse(data)
+
+    const pages: number = Math.ceil(count / take)
+
+    const prevPage: string | null =
+      page === 1 ? null : `${baseUrl}?pageNumber=${page! - 1}&pageSize=${take}`
+    const nextPage: string | null =
+      page! + 1 > pages
+        ? null
+        : `${baseUrl}?pageNumber=${page! + 1}&pageSize=${take}`
+
+    return {
+      nextPage,
+      prevPage,
+      count,
+      pages,
+      data: users,
+    }
   }
 
   update = async (id: string, updateUserDto: UpdateUser) => {

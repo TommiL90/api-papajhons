@@ -36,13 +36,13 @@ export class ProductController {
 
     const baseUrl = `${req.protocol}://${req.get('host')}`
 
-    const productsFromCache = await redis.get(
-      `products-${params.query ? params.query : ''}-${
-        params.categoryId ? params.categoryId : ''
-      }-${params.pageNumber ? params.pageNumber : ''}-${
-        params.pageSize ? params.pageSize : ''
-      }`,
-    )
+    const key = `${baseUrl}-${params.query ? params.query : ''}-${
+      params.categoryId ? params.categoryId : ''
+    }-${params.pageNumber ? params.pageNumber : ''}-${
+      params.pageSize ? params.pageSize : ''
+    }`
+
+    const productsFromCache = await redis.get(key)
 
     if (productsFromCache) {
       return res.status(200).json(JSON.parse(productsFromCache))
@@ -52,16 +52,7 @@ export class ProductController {
 
     const products = await makeListProducts(params, baseUrl)
 
-    await redis.set(
-      `products-${params.query ? params.query : ''}-${
-        params.categoryId ? params.categoryId : ''
-      }-${params.pageNumber ? params.pageNumber : ''}-${
-        params.pageSize ? params.pageSize : ''
-      }`,
-      JSON.stringify(products),
-      'EX',
-      600,
-    )
+    await redis.set(key, JSON.stringify(products), 'EX', 600)
 
     return res.status(200).json(products)
   }

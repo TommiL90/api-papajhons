@@ -2,8 +2,8 @@ import prisma from '@/lib/prisma'
 import { UsersRepository } from '../user-repository'
 import {
   CreateUser,
+  FetchUsers,
   UpdateUser,
-  User,
   UserWithoutPassword,
 } from '@/interfaces/users-interfaces-schema'
 
@@ -40,8 +40,20 @@ export class PrismaUserRepository implements UsersRepository {
     return user
   }
 
-  async findAll(): Promise<User[]> {
-    return await prisma.user.findMany()
+  async findAll(skip: number, take: number): Promise<FetchUsers> {
+    const usersPromise = await prisma.user.findMany({
+      skip,
+      take,
+    })
+
+    const totalPromise = await prisma.user.count()
+
+    const [users, total] = await Promise.all([usersPromise, totalPromise])
+
+    return {
+      count: total,
+      data: users,
+    }
   }
 
   async update(id: string, data: UpdateUser): Promise<UserWithoutPassword> {
