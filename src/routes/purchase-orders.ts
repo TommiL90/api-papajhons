@@ -1,6 +1,7 @@
 import { PurchaseOrdersController } from '@/controllers/purchase-order-controller'
 import { validateBodyMiddleware } from '@/middlewares/body-validation-middleware'
-import { PurchaseOrdersCreateSchema } from '@/schemas/purchase-orders-schema'
+import { CreatePurchaseOrderWithItemsSchema } from '@/schemas/purchase-orders-schema'
+
 import { Router } from 'express'
 
 const purchaseOrdersRouter: Router = Router()
@@ -8,7 +9,7 @@ const purchaseOrder = new PurchaseOrdersController()
 
 purchaseOrdersRouter.post(
   '/create',
-  validateBodyMiddleware(PurchaseOrdersCreateSchema),
+  validateBodyMiddleware(CreatePurchaseOrderWithItemsSchema),
   purchaseOrder.create,
 )
 

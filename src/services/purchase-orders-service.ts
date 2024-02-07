@@ -4,37 +4,49 @@ import {
   CreatePurchaseOrders,
   PurchaseOrders,
   UpdatePurchaseOrder,
+  CreatePurchaseOrderWithItems,
 } from '@/interfaces/purchase-order-interfaces'
 import { AppError } from '@/errors/AppError'
 import { OrdersStatus } from '@prisma/client'
 import { CreatePurchaseOrderItem } from '@/interfaces/purchase-order-item-interfaces'
+import { PurchaseOrderItemService } from './purchase-order-item-service'
 
 export class PurchaseOrdersService {
   constructor(
     private purchaseOrdersRepository: PurchaseOrdersRepository,
     private useRepository: UsersRepository,
+    private purchaseOrderItemService: PurchaseOrderItemService,
   ) {}
 
   createPurchaseOrders = async (
-    createPurchaseOrders: Omit<CreatePurchaseOrders, 'status' | 'paid'>,
+    createPurchaseOrders: CreatePurchaseOrderWithItems,
   ): Promise<PurchaseOrders> => {
+    const { userId, orderItems } = createPurchaseOrders
     const createPurchaseOrder: CreatePurchaseOrders = {
-      ...createPurchaseOrders,
+      userId,
       paid: false,
       status: OrdersStatus.CREATED,
     }
 
     await this.checkUser(createPurchaseOrders.userId)
 
-    const order = await this.findCreatedStatusByUserId(
-      createPurchaseOrders.userId,
+    const purchaseOrder = await this.purchaseOrdersRepository.create(
+      createPurchaseOrder,
     )
 
-    if (order) {
-      return order
-    }
+    const { id } = purchaseOrder
 
-    return await this.purchaseOrdersRepository.create(createPurchaseOrder)
+    const orderItemsWithPurchaseOrderId: CreatePurchaseOrderItem[] =
+      orderItems.map((item) => ({
+        ...item,
+        purchaseOrderId: id,
+      }))
+
+    await this.purchaseOrderItemService.createPurchaseOrderItems(
+      orderItemsWithPurchaseOrderId,
+    )
+
+    return purchaseOrder
   }
 
   findAll = async (): Promise<PurchaseOrders[]> => {
@@ -70,7 +82,6 @@ export class PurchaseOrdersService {
 
   sendPurchaseOrder = async (
     idPurchaseOrder: string,
-    createPurchaseOrdersItems: Omit<CreatePurchaseOrderItem, 'orderId'>[],
   ): Promise<PurchaseOrders> => {
     const purchaseOrder = await this.findById(idPurchaseOrder)
 
@@ -88,15 +99,6 @@ export class PurchaseOrdersService {
         403,
       )
     }
-
-    await Promise.all(
-      createPurchaseOrdersItems.map((item) => {
-        return this.createPurchaseOrderItem({
-          ...item,
-          purchaseOrderId: idPurchaseOrder,
-        })
-      }),
-    )
 
     const updatePurchaseOrder: UpdatePurchaseOrder = {
       status: OrdersStatus.RUNNING,
@@ -150,29 +152,4 @@ export class PurchaseOrdersService {
       throw new AppError(`User with ID ${userId} not found`)
     }
   }
-
-  private findCreatedStatusByUserId = async (
-    userId: string,
-  ): Promise<PurchaseOrders | null> => {
-    const status: OrdersStatus = OrdersStatus.CREATED
-    return await this.purchaseOrdersRepository.findCreatedStatusByUserId(
-      userId,
-      status,
-    )
-  }
-
-  // private createPurchaseOrderItem = async (
-  //   createPurchaseOrderItem: CreatePurchaseOrderItem,
-  // ): Promise<PurchaseOrderItem> => {
-  //   const order = await this.findById(createPurchaseOrderItem.purchaseOrderId)
-  //   if (order.paid === false) {
-  //     throw new AppError('Order not paid')
-  //   }
-
-  //   const newOrderProduct = await this.purchaseOrderItemRepository.create(
-  //     createPurchaseOrderItem,
-  //   )
-
-  //   return newOrderProduct
-  // }
 }

@@ -8,7 +8,6 @@ import categoryRouter from './routes/category-routes'
 import purchaseOrdersRouter from './routes/purchase-orders'
 import authRouter from './routes/auth-routes'
 import { handleAppError } from './errors/AppError'
-import productPurchaseOrderItemRouter from './routes/purchase-order-item-routes'
 
 const app = express()
 
@@ -23,7 +22,6 @@ app.use('/users', userRouter)
 app.use('/categories', categoryRouter)
 app.use('/products', productRouter)
 app.use('/orders', purchaseOrdersRouter)
-app.use('/product-order-items', productPurchaseOrderItemRouter)
 app.use('/session', authRouter)
 
 app.use(handleAppError)

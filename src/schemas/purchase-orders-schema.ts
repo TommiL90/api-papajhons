@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { OrdersStatus } from '@prisma/client'
+import { PurchaseOrderItemsInOrder } from './purchase-order-item-schema'
 
 export const OrdersStatusSchema = z
   .enum([
@@ -25,8 +26,16 @@ export const PurchaseOrdersSchema = z.object({
   userId: z.string(),
 })
 
-export const PurchaseOrdersCreateSchema = PurchaseOrdersSchema.omit({
+export const CreatePurchaseOrdersSchema = PurchaseOrdersSchema.omit({
   id: true,
   createdAt: true,
   updatedAt: true,
 })
+
+export const CreatePurchaseOrderWithItemsSchema =
+  CreatePurchaseOrdersSchema.omit({
+    paid: true,
+    status: true,
+  }).extend({
+    orderItems: PurchaseOrderItemsInOrder,
+  })

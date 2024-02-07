@@ -24,3 +24,9 @@ export const CreatePurchaseOrderItemSchema = PurchaseOrderItemSchema.omit({
   createdAt: true,
   updatedAt: true,
 })
+
+export const PurchaseOrderItemsInOrder = z.array(
+  CreatePurchaseOrderItemSchema.omit({
+    purchaseOrderId: true,
+  }),
+)
