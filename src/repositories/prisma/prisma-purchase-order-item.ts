@@ -6,14 +6,17 @@ import { Prisma } from '@prisma/client'
 export class PrismaPurchaseOrderItemRepository
   implements PurchaseOrderItemRepository
 {
-  async create(createPurchaseOrderItem: CreatePurchaseOrderItem) {
-    return await prisma.purchaseOrderItems.create({
-      data: {
-        productId: createPurchaseOrderItem.purchaseOrderId,
-        purchaseOrderId: createPurchaseOrderItem.purchaseOrderId,
-        price: new Prisma.Decimal(createPurchaseOrderItem.price.toString()),
-        quantity: createPurchaseOrderItem.quantity,
-      },
+  async createMany(createPurchaseOrderItems: CreatePurchaseOrderItem[]) {
+    const formatedData = createPurchaseOrderItems.map((item) => ({
+      ...item,
+      price: new Prisma.Decimal(item.price),
+    }))
+
+    const data = await prisma.purchaseOrderItems.createMany({
+      data: formatedData,
+      skipDuplicates: true,
     })
+
+    return data
   }
 }

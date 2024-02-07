@@ -1,6 +1,7 @@
 import { AppError } from '@/errors/AppError'
 import {
   CreateProduct,
+  PaginatedProducts,
   SearchProductsParams,
   UpdateProduct,
 } from '@/interfaces/product-interfaces'
@@ -26,11 +27,40 @@ export class ProductsService {
     return this.productsRepository.create(createProduct)
   }
 
-  findAll = (params: SearchProductsParams) => {
-    return this.productsRepository.findAll(params)
+  findAll = async (
+    params: SearchProductsParams,
+    baseUrl: string,
+  ): Promise<PaginatedProducts> => {
+    const { categoryId, query, pageNumber, pageSize } = params
+    const page = parseInt(pageNumber?.toString() || '1', 10)
+    const take = parseInt(pageSize?.toString() || '20', 10)
+
+    const { data, count: total } = await this.productsRepository.findAll({
+      query,
+      pageNumber: page,
+      categoryId,
+      pageSize: take,
+    })
+
+    const pages: number = Math.ceil(total / take)
+
+    const prevPage: string | null =
+      page === 1 ? null : `${baseUrl}?pageNumber=${page! - 1}&pageSize=${take}`
+    const nextPage: string | null =
+      page! + 1 > pages
+        ? null
+        : `${baseUrl}?pageNumber=${page! + 1}&pageSize=${take}`
+
+    return {
+      nextPage,
+      prevPage,
+      count: total,
+      pages,
+      data,
+    }
   }
 
-  findById = (id: string) => {
+  findById = async (id: string) => {
     const product = this.productsRepository.findById(id)
     if (!product) {
       throw new AppError('Product not found')
@@ -38,7 +68,7 @@ export class ProductsService {
     return product
   }
 
-  update = (id: string, updateProduct: UpdateProduct) => {
+  update = async (id: string, updateProduct: UpdateProduct) => {
     const product = this.productsRepository.update(id, updateProduct)
     if (!product) {
       throw new AppError('Product not found')
@@ -46,7 +76,7 @@ export class ProductsService {
     return product
   }
 
-  delete = (id: string) => {
+  delete = async (id: string) => {
     const deletedProduct = this.productsRepository.delete(id)
     if (!deletedProduct) {
       throw new AppError('Product not found')

@@ -1,41 +1,46 @@
 import { Router } from 'express'
 
 import { UserController } from '@/controllers/user-controller'
-import { AuthSchema, CreateUserSchema } from '@/schemas/user-schema'
-import { BodyValidationMiddleware } from '@/middlewares/body-validation-middleware'
+import { CreateUserSchema } from '@/schemas/user-schema'
+import { validateBodyMiddleware } from '@/middlewares/body-validation-middleware'
+import { verifyTokenMiddleware } from '@/middlewares/verify-token-middleware'
+import { verifyOwnerMiddleware } from '@/middlewares/verify-owner-middleware'
+import { Role } from '@prisma/client'
 
 const userRouter: Router = Router()
 const userController = new UserController()
 
 userRouter.post(
   '/register',
-  BodyValidationMiddleware.execute(CreateUserSchema),
+  validateBodyMiddleware(CreateUserSchema),
   userController.createUser,
 )
-userRouter.post(
-  '/session',
-  BodyValidationMiddleware.execute(AuthSchema),
-  userController.authUser,
-)
 
-userRouter.get('', userController.findAll)
+userRouter.get(
+  '',
+  verifyTokenMiddleware,
+  verifyOwnerMiddleware(Role.ADMIN),
+  userController.findAll,
+)
 
 userRouter.get(
   '/:id',
-
+  verifyTokenMiddleware,
+  verifyOwnerMiddleware(),
   userController.findById,
 )
 
 userRouter.patch(
   '/:id',
-
-  // middlewares.validateBodyMiddleware(updateUserSchema),
+  verifyTokenMiddleware,
+  verifyOwnerMiddleware(),
   userController.update,
 )
 
 userRouter.delete(
   '/:id',
-
+  verifyTokenMiddleware,
+  verifyOwnerMiddleware(),
   userController.delete,
 )
 

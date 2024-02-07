@@ -32,15 +32,17 @@ export class ProductController {
   }
 
   findAll = async (req: Request, res: Response) => {
-    const body: SearchProductsParams = req.query
+    const params: SearchProductsParams = req.query
 
-    const productsFromCache = await redis.get(
-      `products-${body.query ? body.query : ''}-${
-        body.categoryId ? body.categoryId : ''
-      }-${body.pageNumber ? body.pageNumber : ''}-${
-        body.pageSize ? body.pageSize : ''
-      }`,
-    )
+    const baseUrl = `${req.protocol}://${req.get('host')}`
+
+    const key = `${baseUrl}-${params.query ? params.query : ''}-${
+      params.categoryId ? params.categoryId : ''
+    }-${params.pageNumber ? params.pageNumber : ''}-${
+      params.pageSize ? params.pageSize : ''
+    }`
+
+    const productsFromCache = await redis.get(key)
 
     if (productsFromCache) {
       return res.status(200).json(JSON.parse(productsFromCache))
@@ -48,18 +50,9 @@ export class ProductController {
 
     const makeListProducts = makeListProduct()
 
-    const products = await makeListProducts(body)
+    const products = await makeListProducts(params, baseUrl)
 
-    await redis.set(
-      `products-${body.query ? body.query : ''}-${
-        body.categoryId ? body.categoryId : ''
-      }-${body.pageNumber ? body.pageNumber : ''}-${
-        body.pageSize ? body.pageSize : ''
-      }`,
-      JSON.stringify(products),
-      'EX',
-      600,
-    )
+    await redis.set(key, JSON.stringify(products), 'EX', 600)
 
     return res.status(200).json(products)
   }

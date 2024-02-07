@@ -6,11 +6,12 @@ import {
   SearchProductsParams,
   UpdateProduct,
 } from '@/interfaces/product-interfaces'
+import { Prisma } from '@prisma/client'
 
 export class PrismaProductsRepository implements ProductsRepository {
   async create(data: CreateProduct) {
     const product = await prisma.product.create({
-      data,
+      data: { ...data, price: new Prisma.Decimal(data.price) },
     })
 
     return product
@@ -25,13 +26,9 @@ export class PrismaProductsRepository implements ProductsRepository {
   }
 
   async findAll(params: SearchProductsParams): Promise<FetchProducts> {
-    const url = 'URL'
-    const { categoryId, query, pageNumber, pageSize } = params
-    const page = pageNumber || 1
-    const take = pageSize || 20
-    const skip = (page - 1) * take
+    const { categoryId, query, pageNumber: page, pageSize: take } = params
+    const skip = (page! - 1) * take!
     const where: any = {}
-    console.log('aqui')
     if (categoryId !== undefined) {
       where.categoryId = categoryId
     }
@@ -55,21 +52,8 @@ export class PrismaProductsRepository implements ProductsRepository {
 
     const [products, total] = await Promise.all([productsPromise, totalPromise])
 
-    const pages: number = Math.ceil(total / take)
-
-    const prevPage: string | null =
-      page === 1 ? null : `${url}?pageNumber=${page! - 1}&pageSize=${take}`
-    const nextPage: string | null =
-      page! + 1 > pages
-        ? null
-        : `${url}?pageNumber=${page! + 1}&pageSize=${take}`
-    console.log(nextPage, prevPage, total, pages, products)
-
     return {
-      nextPage,
-      prevPage,
-      items: total,
-      pages,
+      count: total,
       data: products,
     }
   }
@@ -77,7 +61,12 @@ export class PrismaProductsRepository implements ProductsRepository {
   async update(id: string, updateProduct: UpdateProduct) {
     const updatedProduct = await prisma.product.update({
       where: { id },
-      data: updateProduct,
+      data: {
+        ...updateProduct,
+        price: updateProduct.price
+          ? new Prisma.Decimal(updateProduct.price)
+          : undefined,
+      },
     })
 
     return updatedProduct

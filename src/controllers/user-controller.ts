@@ -3,6 +3,7 @@ import { makeCreateUser } from '@/services/factories/make-create-user'
 import { makeAuthUserService } from '@/services/factories/make-auth-service'
 import {
   CreateUser,
+  PaginatedUsers,
   UserWithoutPassword,
 } from '@/interfaces/users-interfaces-schema'
 import { makeFindUserById } from '@/services/factories/make-find-user-by-id'
@@ -10,6 +11,7 @@ import { makeFindAllUsers } from '@/services/factories/make-find-all-users'
 import { makeUpdateUser } from '@/services/factories/make-update-user'
 import { makeDeleteUser } from '@/services/factories/make-delete-user'
 import { redis } from '@/lib/redis'
+import { z } from 'zod'
 
 export class UserController {
   createUser = async (req: Request, res: Response) => {
@@ -40,7 +42,15 @@ export class UserController {
   }
 
   findAll = async (req: Request, res: Response) => {
-    const userFromCache = await redis.get('users')
+    const searchGymsQuerySchema = z.object({
+      page: z.coerce.number().min(1).default(1),
+      take: z.coerce.number().min(1).default(30),
+    })
+    const { page, take } = searchGymsQuerySchema.parse(req.query)
+    const baseUrl = `${req.protocol}://${req.get('host')}`
+    const key = `${baseUrl}-${page}`
+
+    const userFromCache = await redis.get(key)
 
     if (userFromCache) {
       return res.status(200).json(JSON.parse(userFromCache))
@@ -48,9 +58,9 @@ export class UserController {
 
     const findAllUsers = makeFindAllUsers()
 
-    const users = await findAllUsers()
+    const users: PaginatedUsers = await findAllUsers(page, take, baseUrl)
 
-    await redis.set('users', JSON.stringify(users), 'EX', 600)
+    await redis.set(key, JSON.stringify(users), 'EX', 600)
 
     return res.status(200).json(users)
   }

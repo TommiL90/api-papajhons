@@ -1,11 +1,10 @@
-import request from 'supertest';
-import app from './app';
-
+import request from 'supertest'
+import app from './app'
 
 describe('Hello world', () => {
   it('should display hello world message', async () => {
-    const response = await request(app).get('/').send();
+    const response = await request(app).get('/').send()
 
-    expect(response.statusCode).toBe(200);
+    expect(response.statusCode).toBe(200)
   })
-});
+})

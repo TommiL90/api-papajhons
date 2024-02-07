@@ -1,5 +1,6 @@
 import {
   CreateUser,
+  FetchUsers,
   UpdateUser,
   UserWithoutPassword,
 } from '@/interfaces/users-interfaces-schema'
@@ -14,7 +15,7 @@ export abstract class UsersRepository {
 
   abstract findById(id: string): Promise<UserWithoutPassword | null>
 
-  abstract findAll(): Promise<User[]>
+  abstract findAll(skip: number, take: number): Promise<FetchUsers>
 
   abstract update(id: string, data: UpdateUser): Promise<UserWithoutPassword>
 

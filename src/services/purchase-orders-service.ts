@@ -4,44 +4,49 @@ import {
   CreatePurchaseOrders,
   PurchaseOrders,
   UpdatePurchaseOrder,
+  CreatePurchaseOrderWithItems,
 } from '@/interfaces/purchase-order-interfaces'
 import { AppError } from '@/errors/AppError'
 import { OrdersStatus } from '@prisma/client'
-import { PurchaseOrderItemRepository } from '@/repositories/purchase-order-item-repository'
-import {
-  CreatePurchaseOrderItem,
-  PurchaseOrderItem,
-} from '@/interfaces/purchase-order-item-interfaces'
+import { CreatePurchaseOrderItem } from '@/interfaces/purchase-order-item-interfaces'
+import { PurchaseOrderItemService } from './purchase-order-item-service'
 
 export class PurchaseOrdersService {
   constructor(
     private purchaseOrdersRepository: PurchaseOrdersRepository,
-    private purchaseOrderItemRepository: PurchaseOrderItemRepository,
     private useRepository: UsersRepository,
+    private purchaseOrderItemService: PurchaseOrderItemService,
   ) {}
 
   createPurchaseOrders = async (
-    createPurchaseOrders: Omit<CreatePurchaseOrders, 'status' | 'paid'>,
+    createPurchaseOrders: CreatePurchaseOrderWithItems,
   ): Promise<PurchaseOrders> => {
-    const createPurchaseOrderComplete: CreatePurchaseOrders = {
-      ...createPurchaseOrders,
+    const { userId, createOrderItems } = createPurchaseOrders
+    const createPurchaseOrder: CreatePurchaseOrders = {
+      userId,
       paid: false,
       status: OrdersStatus.CREATED,
     }
 
     await this.checkUser(createPurchaseOrders.userId)
 
-    const order = await this.findCreatedStatusByUserId(
-      createPurchaseOrders.userId,
+    const purchaseOrder = await this.purchaseOrdersRepository.create(
+      createPurchaseOrder,
     )
 
-    if (order) {
-      return order
-    }
+    const { id } = purchaseOrder
 
-    return await this.purchaseOrdersRepository.create(
-      createPurchaseOrderComplete,
+    const createOrderItemsWithPurchaseOrderId: CreatePurchaseOrderItem[] =
+      createOrderItems.map((item) => ({
+        ...item,
+        purchaseOrderId: id,
+      }))
+
+    await this.purchaseOrderItemService.createPurchaseOrderItems(
+      createOrderItemsWithPurchaseOrderId,
     )
+
+    return purchaseOrder
   }
 
   findAll = async (): Promise<PurchaseOrders[]> => {
@@ -77,22 +82,27 @@ export class PurchaseOrdersService {
 
   sendPurchaseOrder = async (
     idPurchaseOrder: string,
-    createPurchaseOrdersItems: Omit<CreatePurchaseOrderItem, 'orderId'>[],
   ): Promise<PurchaseOrders> => {
-    await Promise.all(
-      createPurchaseOrdersItems.map((item) => {
-        return this.createPurchaseOrderItem({
-          ...item,
-          purchaseOrderId: idPurchaseOrder,
-        })
-      }),
-    )
+    const purchaseOrder = await this.findById(idPurchaseOrder)
+
+    if (purchaseOrder.paid === false) {
+      throw new AppError(`Order with ID ${idPurchaseOrder} is not paid`, 402)
+    }
+
+    if (
+      purchaseOrder.status === OrdersStatus.DONE ||
+      purchaseOrder.status === OrdersStatus.RUNNING ||
+      purchaseOrder.status === OrdersStatus.FAILURE
+    ) {
+      throw new AppError(
+        `Order with ID ${idPurchaseOrder} is unauthorized`,
+        403,
+      )
+    }
 
     const updatePurchaseOrder: UpdatePurchaseOrder = {
       status: OrdersStatus.RUNNING,
     }
-
-    await this.findById(idPurchaseOrder)
 
     return await this.purchaseOrdersRepository.updateStatus(
       idPurchaseOrder,
@@ -141,30 +151,5 @@ export class PurchaseOrdersService {
     if (!foundUser) {
       throw new AppError(`User with ID ${userId} not found`)
     }
-  }
-
-  private findCreatedStatusByUserId = async (
-    userId: string,
-  ): Promise<PurchaseOrders | null> => {
-    const status: OrdersStatus = OrdersStatus.CREATED
-    return await this.purchaseOrdersRepository.findCreatedStatusByUserId(
-      userId,
-      status,
-    )
-  }
-
-  private createPurchaseOrderItem = async (
-    createPurchaseOrderItem: CreatePurchaseOrderItem,
-  ): Promise<PurchaseOrderItem> => {
-    const order = await this.findById(createPurchaseOrderItem.purchaseOrderId)
-    if (order.paid === false) {
-      throw new AppError('Order not paid')
-    }
-
-    const newOrderProduct = await this.purchaseOrderItemRepository.create(
-      createPurchaseOrderItem,
-    )
-
-    return newOrderProduct
   }
 }

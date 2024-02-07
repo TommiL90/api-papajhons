@@ -22,6 +22,9 @@ export class PrismaPurchaseOrdersRepository
   async findAllByUserId(userId: string) {
     return await prisma.purchaseOrders.findMany({
       where: { userId },
+      include: {
+        purchaseOrderItems: true,
+      },
     })
   }
 
@@ -31,14 +34,22 @@ export class PrismaPurchaseOrdersRepository
     })
   }
 
-  findById(id: string) {
-    return prisma.purchaseOrders.findUnique({
+  async findById(id: string) {
+    const item = await prisma.purchaseOrders.findUnique({
       where: { id },
+      include: {
+        purchaseOrderItems: {
+          include: {
+            product: true,
+          },
+        },
+      },
     })
+    return item
   }
 
-  updateStatus(id: string, PurchaseOrder: UpdatePurchaseOrder) {
-    return prisma.purchaseOrders.update({
+  async updateStatus(id: string, PurchaseOrder: UpdatePurchaseOrder) {
+    return await prisma.purchaseOrders.update({
       where: { id },
       data: {
         ...PurchaseOrder,
