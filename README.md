@@ -165,8 +165,8 @@ A seguir estão os objetos necessários para cada rota de escrita mais relevante
 - **POST - /session**
 ```json
 {
-	"email": "admin3@mail.com",
-	"password": "123456"
+ "email": "admin3@mail.com",
+"password": "123456"
 }
 ```
 
@@ -175,11 +175,11 @@ A seguir estão os objetos necessários para cada rota de escrita mais relevante
 ```json
 {
 {
-	"username": "user94",
-	"firstName": "user",
-	"lastName": "user",
-	"email": "user94@mail.com",
-	"password": "T12345"
+ "username": "user94",
+ "firstName": "user",
+ "lastName": "user",
+ "email": "user94@mail.com",
+ "password": "T12345"
 }
 }
 ```
@@ -188,7 +188,7 @@ A seguir estão os objetos necessários para cada rota de escrita mais relevante
 - **POST - /categories**
 ```json
 {
-	"name": "Category 3"
+ "name": "Category 3"
 }
 ```
 
@@ -196,24 +196,24 @@ A seguir estão os objetos necessários para cada rota de escrita mais relevante
 - **POST - /purchase-orders**
 ```json
 {
-	"userId": "d50ac1a9-9abc-4947-8674-9b955f4296c0",
-	"createOrderItems": [
-		{
-			"productId": "00035976-3c92-4e1e-8f63-b7eca36dbaac",
-			"price": "22.22",
-			"quantity": 5
-		},
-    {
-			"productId": "00035976-3c92-4e1e-8f63-b7eca36dbaac",
-			"price": "22.22",
-			"quantity": 3
-		},
-    {
-			"productId": "00035976-3c92-4e1e-8f63-b7eca36dbaac",
-			"price": "22.22",
-			"quantity": 5
-		}
-	]
+ "userId": "d50ac1a9-9abc-4947-8674-9b955f4296c0",
+ "createOrderItems": [
+  {
+   "productId": "00035976-3c92-4e1e-8f63-b7eca36dbaac",
+   "price": "22.22",
+   "quantity": 5
+  },
+  {
+   "productId": "00035976-3c92-4e1e-8f63-b7eca36dbaac",
+   "price": "22.22",
+   "quantity": 3
+  },
+  {
+   "productId": "00035976-3c92-4e1e-8f63-b7eca36dbaac",
+   "price": "22.22",
+   "quantity": 5
+  }
+]
 }
 ```
 ### Pagar uma ordem de compra
