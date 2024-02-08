@@ -1,6 +1,5 @@
 import { Prisma, PrismaClient, Role } from '@prisma/client'
 import { faker } from '@faker-js/faker'
-import { randomUUID } from 'crypto'
 import { hash } from 'bcryptjs'
 
 const prisma = new PrismaClient()
@@ -9,8 +8,8 @@ const createAdmin = async () => {
   const hashedPassword = await hash('123456', 10)
   const user = await prisma.user.create({
     data: {
-      username: 'admin3',
-      email: 'admin3@mail.com',
+      username: 'admin',
+      email: 'admin@mail.com',
       firstName: faker.person.firstName(),
       lastName: faker.person.lastName(),
       password: hashedPassword,
@@ -55,7 +54,7 @@ const retrieveCategories = async () => {
 }
 
 const createProducts = async () => {
-  for (let i = 0; i < 1500; i++) {
+  for (let i = 0; i < 500; i++) {
     const category = await retrieveCategories()
 
     const product = await prisma.product.create({
@@ -73,9 +72,8 @@ const createProducts = async () => {
   }
 }
 async function main() {
-  // await Promise.all([createUsers(), createCategories()])
-  // await createProducts()
-  await createAdmin()
+  await Promise.all([createAdmin(), createUsers(), createCategories()])
+  await createProducts()
 }
 
 main()
