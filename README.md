@@ -139,6 +139,14 @@ e
 
 `npm run start`
 
+- **Usuario ADMIN para acessar todas as rotas**
+```json
+{
+	"email": "admin@mail.com",
+	"password": "123456"
+}
+```
+
 ## 4. Documentação da API
 
 [Voltar para o topo](#tabela-de-conteúdos)
