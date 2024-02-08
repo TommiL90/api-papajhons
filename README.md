@@ -23,9 +23,15 @@ A API permite que os usuários se cadastrem como clientes ou administradores, fa
 
 ## 1. Visão Geral
 
-O projeto foi totalmente desenvolvido em TypeScript, utilizando o Node.js, com o framework Express sendo a escolha principal. Para realizar a serialização dos dados das requisições, optou-se por utilizar a biblioteca Zod. Em relação ao banco de dados, foi escolhido o PostgreSQL como sistema relacional, sendo o Prisma responsável pelo gerenciamento das consultas. O Redis foi utilizado para o gerenciamento de cache das rotas mais acessadas. Para a execução dos bancos de dados, foi adotado o Docker como solução.
+O projeto foi totalmente desenvolvido em TypeScript, utilizando Node.js como plataforma principal, e o framework Express como a escolha principal para construção da aplicação. Para a serialização dos dados das requisições, optou-se por utilizar a biblioteca Zod.
 
-A API cumple os seguintes requermentos: 
+Em relação ao banco de dados, foi escolhido o PostgreSQL como sistema relacional, sendo o Prisma responsável pelo gerenciamento das consultas. Além disso, o Redis foi utilizado para o gerenciamento de cache das rotas mais acessadas.
+
+Para a execução dos bancos de dados, adotou-se o Docker como solução, proporcionando um ambiente isolado e facilmente replicável para o desenvolvimento e implantação da aplicação.
+
+Com o objetivo de manter uma arquitetura limpa e escalável, foram aplicados conceitos como o padrão Repository Pattern, Factory Pattern e os princípios SOLID. 
+
+A API cumple os seguintes requerimentos: 
 
 
 ## RFs (Requisitos funcionais)
@@ -137,7 +143,8 @@ e
 
 [Voltar para o topo](#tabela-de-conteúdos)
 
-A seguir estão os objetos necessários para cada rota de escrita mais relevantes. As rotas de edição seguem a mesma estrutura, mas cada chave é opcional. O gerenciamento de ordens de compra, nas rotas de escrita, só pode ser criado e gerenciado nos seguintes estados: criada, paga, enviada, entregue e com erro:
+Um arquivo JSON do Insomnia está incluído para importar e testar todas as rotas disponíveis.
+A seguir estão os objetos necessários para cada rota de escrita mais relevantes. As rotas de edição seguem a mesma estrutura, mas cada chave é opcional. O gerenciamento de pedidos de compra, nas rotas de escrita, só pode ser criado e gerenciado nos seguintes estados: criado, pago, enviado, entregue e com erro:
 
 
 ### Criar um novo produto
