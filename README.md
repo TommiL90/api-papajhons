@@ -200,7 +200,7 @@ A seguir estão os objetos necessários para cada rota de escrita mais relevante
 ```
 
 ### Criar uma nova ordem de compra
-- **POST - /purchase-orders**
+- **POST - /purchase-orders/create**
 ```json
 {
  "userId": "d50ac1a9-9abc-4947-8674-9b955f4296c0",
@@ -224,11 +224,13 @@ A seguir estão os objetos necessários para cada rota de escrita mais relevante
 }
 ```
 ### Pagar uma ordem de compra
-- **patch - /purchase-orders**
+- **patch - /purchase-orders/pay**
 ### Enviar uma ordem de compra
-- **patch - /purchase-orders**
+- **patch - /purchase-orders/send**
 ### Entregar uma ordem de compra
-- **patch - /purchase-orders**
+- **patch - /purchase-orders/deliver**
+### Erro uma ordem de compra
+- **patch - /purchase-orders/failure**
 
 
 ## Consultas com Opções de Paginação e Filtragem
