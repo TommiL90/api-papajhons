@@ -41,7 +41,6 @@ A API cumple os seguintes requerimentos:
 - [x] Deve ser possível obter o perfil de um usuário logado;
 - [x] Deve ser possível o usuário admin obter o um histórico de ordens de produtos de um usuario;
 - [x] Deve ser possível o usuário buscar produtos pelo nome;
-- [x] Deve ser possível ser possível cadastrar uma academia;
 - [x] Deve ser possível o gerenciamento de produtos (criação, deleção, atualização);
 - [x] Deve ser possível a busca de produtos com paginação e com a possibilidade de utilização de filtros;
 - [x] Deve ser possível a busca por de produto por id;
