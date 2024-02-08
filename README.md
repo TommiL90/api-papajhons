@@ -17,6 +17,7 @@ A API permite que os usuários se cadastrem como clientes ou administradores, fa
   - [Rodando a API](#34-rodando-a-api)
 - [Documentação da API](#4-documentação-da-api)
 - [Estrutura da API](#5-estrutura-da-api)
+- [Teste](#5-estrutura-da-api)
 
 ---
 
@@ -136,10 +137,109 @@ e
 
 [Voltar para o topo](#tabela-de-conteúdos)
 
-É possivel acessar a documentação da API criada com Swagger de forma local utilizando o endpoint /api-docs/ ou pelo link ([Motor-Shop-Documentação-local](http://localhost:3000/api-docs/#/)) , lembrando que é necessário que o servidor esteja rodando de forma local, para o link funcionar.
-Essa documentação descreve os recusos que a API possuí, como Endpoints, exemplos de requisição, exemplos de retorno e metodos de autenticação.
-Também é possível acessar a documentação da API pelos seguintes links:
+A seguir estão os objetos necessários para cada rota de escrita mais relevantes. As rotas de edição seguem a mesma estrutura, mas cada chave é opcional. O gerenciamento de ordens de compra, nas rotas de escrita, só pode ser criado e gerenciado nos seguintes estados: criada, paga, enviada, entregue e com erro:
 
+
+### Criar um novo produto
+- **POST - /products**
+```json
+{
+  "title": "Some shirt",
+  "description": "Some description",
+  "price": "19.99",
+  "stock": 100,
+  "sku": 123456,
+  "brand": "BrandXYZ",
+  "categoryId": "categoryId123",
+  "imgUrl": "https://example.com/image.jpg"
+}
+```
+### Iniciar uma nova sessão
+- **POST - /session**
+```json
+{
+	"email": "admin3@mail.com",
+	"password": "123456"
+}
+```
+
+### Criar um novo usuario
+- **POST - /users**
+```json
+{
+{
+	"username": "user94",
+	"firstName": "user",
+	"lastName": "user",
+	"email": "user94@mail.com",
+	"password": "T12345"
+}
+}
+```
+
+### Criar uma nova categoria
+- **POST - /categories**
+```json
+{
+	"name": "Category 3"
+}
+```
+
+### Criar uma nova ordem de compra
+- **POST - /purchase-orders**
+```json
+{
+	"userId": "d50ac1a9-9abc-4947-8674-9b955f4296c0",
+	"createOrderItems": [
+		{
+			"productId": "00035976-3c92-4e1e-8f63-b7eca36dbaac",
+			"price": "22.22",
+			"quantity": 5
+		},
+    {
+			"productId": "00035976-3c92-4e1e-8f63-b7eca36dbaac",
+			"price": "22.22",
+			"quantity": 3
+		},
+    {
+			"productId": "00035976-3c92-4e1e-8f63-b7eca36dbaac",
+			"price": "22.22",
+			"quantity": 5
+		}
+	]
+}
+```
+### Pagar uma ordem de compra
+- **patch - /purchase-orders**
+### Enviar uma ordem de compra
+- **patch - /purchase-orders**
+### Entregar uma ordem de compra
+- **patch - /purchase-orders**
+
+
+## Consultas com Opções de Paginação e Filtragem
+
+A seguir estão as consultas necessárias para cada rota de leitura que oferece opções de paginação e filtragem:
+
+### Consultar Produtos
+
+- **GET - /products**
+  Filtro por nome de produto ou categoria.
+  ```json
+  - query: string opcional.
+  - page: número da página, opcional.
+  - take: quantidade de produtos por página, opcional.
+  - categoryId: ID da categoria, opcional.
+  ```
+
+
+### Paginar Usuários
+
+- **GET - /users**
+  ```json
+  - page: número da página, opcional.
+  - take: quantidade de usuários por página, opcional.
+  ```
 
 ---
 
@@ -149,28 +249,26 @@ Também é possível acessar a documentação da API pelos seguintes links:
 
 ### Índice
 
-- [Users](#1-users)
+- [Users]
   - POST - /user
   - GET - /user/:userId
   - GET - /user/all
   - PATCH - /user/:userId
   - DELETE - /user/:userId
   - POST - /session/:userId
-- [Products](#2-products)
+- [Products]
   - POST - /products
   - GET - /products
   - GET - /products/:id
-  - GET - /products/:id
   - PATCH - /products/:id
   - DELETE - /products/:id
-- [Products](#3-categories)
-  - POST - /products
-  - GET - /products
-  - GET - /products/:id
-  - GET - /products/:id
-  - PATCH - /products/:id
-  - DELETE - /products/:id
-- [Comments](#4-purchase-orders)
+- [Categories]
+  - POST - /category
+  - GET - /category
+  - GET - /category/:categoryId
+  - PATCH - /category/:categoryId
+  - DELETE - /category/:categoryId
+- [Purchase-orders]
   - POST - /purchase-orders/create
   - PATCH - /purchase-orders/send
   - PATCH - /purchase-orders/pay
@@ -180,162 +278,13 @@ Também é possível acessar a documentação da API pelos seguintes links:
 
 
 ---
+## 6.Testes Unitários e de Integração
 
-## 1. **Users**
+[Voltar para o topo](#tabela-de-conteúdos)
 
-[Voltar para a Estrutura da API](#5-estrutura-da-api)
-
-O objeto User é definido como:
-
-| Campo        | Tipo      | Descrição                                                     |
-| ------------ | --------- | ------------------------------------------------------------- |
-| id           | UUID      | Identificador único do usuário                                |
-| name         | String    | O nome do usuário                                             |
-| email        | String    | O e-mail do usuário                                           |
-| password     | String    | A senha de acesso do usuário                                  |
-| cpf          | String    | O cpf do usuário                                              |
-| phone        | String    | O telefone do usuário                                         |
-| birthDate    | DateTime  | Data de nascimento do usuário                                 |
-| description  | String    | Descrição do usuário                                          |
-| isAdvertiser | Boolean   | Se o usuário é ou não anunciante                              |
-| createdAt    | DateTime  | A data de registro do usuário                                 |
-| updatedAt    | DateTime  | A data de atualiazação do registro do usuário                 |
-| isDeleted    | Boolean   | Se o usuário foi deletado                                     |
-| address      | Address   | Endereço do usuário relacionado em outra tabela               |
-| car          | Cars[]    | Anúncios de carros criados por esse usuário                   |
-| cars         | Comment[] | Comentários do usuário                                        |
-| resetToken   | String?   | String aleatória gerada para ser feita a redefinição de senha |
-
-### Endpoints
-
-| Método | Rota                              | Descrição                                                   |
-| ------ | --------------------------------- | ----------------------------------------------------------- |
-| POST   | /user                             | Criação de um usuário                                       |
-| GET    | /user                             | Lista os dados do usuário logado                            |
-| GET    | /user/all                         | Lista os dados de todos os usuários                         |
-| PATCH  | /user                             | Atualiza os dados do usuário logado.                        |
-| DELETE | /user                             | SoftDelete no usuário logado.                               |
-| PUT    | /user                             | Recupera usuário deletado.                                  |
-| POST   | /user/resetPassword               | Envia e-mail de recuperação de senha do usuário             |
-| PATCH  | /user/resetPassword/:resetTokenId | Atualiza senha do usuário utilizando o token de recuperação |
-
+<h4 align="center">🚧 Em construção... 🚀</h4>
 ---
 
-## 2. **Address**
+## Autor do projeto
 
-[Voltar para a Estrutura da API](#5-estrutura-da-api)
-
-O objeto Address é definido como:
-
-| Campo      | Tipo    | Descrição                           |
-| ---------- | ------- | ----------------------------------- |
-| id         | UUID    | Identificador único do endereço     |
-| zipCode    | String  | Código postal do endereço           |
-| state      | String  | Estado do endereço                  |
-| city       | String  | Cidade do endereço                  |
-| street     | String  | Rua do endereço                     |
-| number     | String  | Número do endereço                  |
-| complement | String? | Complemento do endereço             |
-| user       | Users   | Usuário vinculado a esse endereço   |
-| userId     | String  | Id do usuário vinculado ao endereço |
-
----
-
-## 3. **Cars**
-
-[Voltar para a Estrutura da API](#5-estrutura-da-api)
-
-O objeto Cars é definido como:
-
-| Campo       | Tipo        | Descrição                                                                      |
-| ----------- | ----------- | ------------------------------------------------------------------------------ |
-| id          | String      | Identificador único do anúncio do carro                                        |
-| brand       | String      | Marca do carro anunciado                                                       |
-| model       | String      | Modelo do carro anunciado                                                      |
-| year        | String      | Ano do carro anunciado                                                         |
-| fuelType    | Fuel        | Tipo de combústivel do carro (ENUM: ETANOL, FLEX, HIBRIDO, ELETRICO) anunciado |
-| mileage     | Int         | Kilometragem do carro anunciado                                                |
-| color       | String      | Cor do carro anunciado                                                         |
-| fipePrice   | Float       | Preço do carro anunciado na tabela fipe                                        |
-| price       | Float       | Preço do carro anunciado                                                       |
-| description | String      | Descrição do carro anunciado                                                   |
-| createdAt   | DateTime    | Data de criação do anúncio do carro                                            |
-| isPublished | Boolean     | Se o anúncio do carro está ativo                                               |
-| coverImage  | String      | Imagem de capa do anúncio do carro                                             |
-| user        | Users       | Usuário vinculado ao anúncio do carro                                          |
-| userId      | String      | Id do usuário vinculado ao anúncio do carro                                    |
-| users       | Comment[]   | Comentários deste anúncio                                                      |
-| carImages   | CarImages[] | Imagens do carro vinculado na tabela de carImages                              |
-
-### Endpoints
-
-| Método | Rota               | Descrição                                                      |
-| ------ | ------------------ | -------------------------------------------------------------- |
-| POST   | /cars              | Criação de um anúncio de carro                                 |
-| GET    | /cars              | Lista os anúncios de carros                                    |
-| GET    | /cars/user/:userId | Lista os anúncios de carros vinculados a um usuário específico |
-| GET    | /cars/:carId       | Lista o anúncio de um carro em específico                      |
-| PATCH  | /cars/:carId       | Atualiza o anúncio de um carro                                 |
-| DELETE | /cars/:carId       | Delete o anúncio de um carro                                   |
-
----
-
-## 4. **CarImages**
-
-[Voltar para a Estrutura da API](#5-estrutura-da-api)
-
-O objeto CarImages é definido como:
-
-| Campo | Tipo   | Descrição                           |
-| ----- | ------ | ----------------------------------- |
-| id    | String | Identificador único do contato      |
-| url   | String | Endereço da imagem                  |
-| car   | Cars   | Anúncio de carro vinculado a imagem |
-| carId | String | Id do anúncio do carro vinculado    |
-
----
-
-## 5. **Comments**
-
-[Voltar para a Estrutura da API](#5-estrutura-da-api)
-
-O objeto Comments é definido como:
-
-| Campo     | Tipo     | Descrição                                          |
-| --------- | -------- | -------------------------------------------------- |
-| id        | String   | Identificador único do contato                     |
-| content   | String   | Conteúdo do comentário                             |
-| user      | Users    | Usuário que fez o comentário                       |
-| userId    | String   | Id do usuário que fez o comentário                 |
-| car       | Cars     | Anúncio do carro onde o comentário foi feito       |
-| carId     | String   | Id do anúncio do carro onde o comentário foi feito |
-| createdAt | DateTime | Data de criação do comentário                      |
-
-### Endpoints
-
-| Método | Rota             | Descrição                                       |
-| ------ | ---------------- | ----------------------------------------------- |
-| POST   | /comments/:carId | Criação de um comentário                        |
-| GET    | /comments/:carId | Listagem dos comentários de um anúncio de carro |
-
----
-
-## 6. **Filters**
-
-[Voltar para a Estrutura da API](#5-estrutura-da-api)
-
-### Endpoints
-
-| Método | Rota                              | Descrição                                                                               |
-| ------ | --------------------------------- | --------------------------------------------------------------------------------------- |
-| GET    | /filters?:filterName=:filterValue | Listar os veículos com algum tipo de filtragem, sendo que a filtragem pode ser opcional |
-
----
-
-## Autores do projeto
-
-- Joseph Vriesman [GitHub](https://github.com/Joseph18CV) - [LinkedIn](https://www.linkedin.com/in/josephvriesman/)
-- Antonio Santos [GitHub](https://github.com/AntonioSantosBJPE) - [LinkedIn](https://www.linkedin.com/in/antonio-santos-b934a479/)
-- Rafael Carvalho [GitHub](https://github.com/rafaeuus) - [LinkedIn](https://www.linkedin.com/in/rafael-s-carvalho/)
-- Ricardo Czajkowski [GitHub](https://github.com/ricardocza) - [LinkedIn](https://www.linkedin.com/in/ricardo-cza/)
-- Tomás Lillo Sanhueza [GitHub](https://github.com/TommiL90) - [LinkedIn](https://www.linkedin.com/in/tomasbenjamin/)
+- Tomás Lillo Sanhueza [GitHub](https://github.com/TommiL90) - [LinkedIn](https://www.linkedin.com/in/tomasbenjamin/) - [Portafolio](https://tomidev.vercel.app)
